@@ -1,0 +1,9 @@
+{
+  "name": "CF Industrial",
+  "short_name": "CF Industrial",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#09090a",
+  "theme_color": "#09090a",
+  "icons": []
+}
