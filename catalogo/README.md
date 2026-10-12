@@ -2,6 +2,20 @@
 
 Versão independente em `catalogo/`. O site institucional não foi alterado. Nenhuma publicação, deploy, operação no GitHub ou alteração de DNS foi realizada.
 
+## Panfleto automático por item
+
+Cada card e janela de detalhes tem o botão **Panfleto**, que abre `panfleto.html?produto=CODIGO` em uma nova aba. Layout premium CF Industrial, foto do catálogo, nome integral, código, aplicação e descrição técnica, sem estoque. Rodapé com WhatsApp configurado, site, @oficial.cfindustrial e os quatro símbolos sociais, além da logo Brazilian Imports com indicação discreta de distribuidor oficial. A arte mantém proporção A5 fixa; textos e espaço da foto se ajustam sem alongar a página. Conteúdo excepcionalmente extenso, que não cabe de forma legível, gera aviso em vez de ser cortado.
+
+**Baixar imagem PNG** salva a arte pronta em 1748 × 2480 pixels, com resolução de impressão de 300 dpi. **Imprimir / Salvar PDF** abre a impressão do navegador em A5 (148 × 210 mm), menor que A4. Escolha papel A5; para imprimir a arte em tamanho A5 sobre uma folha A4, selecione A4 e escala 100%. Desative cabeçalhos e rodapés do navegador. Escolha Salvar como PDF para baixar nesse formato. A foto exibida nos detalhes também pode ser usada: escolha a foto na galeria antes de clicar em Panfleto. Não há imagens ou especificações fixas de CF178 na geração.
+
+Desempenho: não existe biblioteca de geração carregada pelo catálogo. `panfleto.js`, `panfleto.css` e as logos extras são consultados somente na nova página. Ao clicar, um retrato dos dados públicos do item é guardado por código no armazenamento local; a nova aba reutiliza esse retrato por até 15 minutos, sem nova consulta à API. Links diretos, dados expirados ou armazenamento bloqueado consultam a API existente. Não há backend novo, serviço externo de geração, IA em tempo de execução ou escrita na planilha.
+
+Fotos: usa `imagem_grande`, com alternativas do mesmo arquivo e fallbacks para `imagem`/galeria. Para imagens públicas do Drive, usa também o endereço do Googleusercontent com o mesmo identificador, necessário para permitir exportação PNG no navegador. Apenas fundo quase branco conectado à borda é suavizado; detalhes interiores são preservados. Fotografias com fundo cinza continuam com esse fundo e recebem cantos suaves. Fotos sem acesso público aparecem como **FOTO INDISPONÍVEL**, com aviso, sem substituição por foto de outro item.
+
+Ao abrir o panfleto diretamente por arquivo (`file://`), as logos são carregadas de `assets/js/panfleto-assets.js`, somente nesse modo, para permitir a exportação PNG sem bloqueio de segurança do navegador. Esse arquivo não é carregado pelo catálogo nem pelo panfleto servido por HTTP. Imagens remotas continuam exigindo acesso público e permissão de leitura do navegador.
+
+Verificação desta função: 71 itens reais na consulta; botão em todos os cards; CF178, TK1011, TK200A, MCVT e SERV01; igualdade de nome, aplicação e descrição; reuso dos dados sem requisição extra; escolha de foto da galeria; download PNG em proporção A5 e 300 dpi; PDFs A5 e A4 com uma página; celular; rejeição explícita de texto extenso demais sem truncamento; foto ausente; código inexistente; botão oculto na impressão do catálogo. TK1011 também exportou PNG e PDF aberto diretamente pelo arquivo local. As fotos públicas de CF178, TK1011, MCVT e SERV01 carregaram. A foto TK200A continua indisponível publicamente. Resultados em `tests/panfleto-resultados.json` e `tests/panfleto-a5-resultados.json`; exemplos em `tests/panfleto-*.png` e PDFs de conferência em `tests/panfleto-CF178.pdf`, `tests/panfleto-CF178-em-A4.pdf` e `tests/panfleto-TK1011-arquivo.pdf`. Esses exemplos não entram em produção.
+
 ## Abrir localmente
 
 Na pasta `C:\Users\admin\Documents\Site CF`, execute:
@@ -115,7 +129,7 @@ Os testes usam Playwright do ambiente Codex e Chrome instalado. Em outro computa
 
 ## Publicação futura manual
 
-Para publicação futura manual, copiar `index.html`, `assets/` e `data/` para `/catalogo/` na hospedagem do site. Caminhos são relativos e funcionam nesse subdiretório. Não enviar `tests/`, servidor local, README ou PDF de demonstração como arquivos de produção. Não precisa modificar DNS, CNAME ou instalar framework. Esta entrega **não foi publicada**.
+Para publicação futura manual, copiar `index.html`, `panfleto.html`, `assets/` e `data/` para `/catalogo/` na hospedagem do site. Caminhos são relativos e funcionam nesse subdiretório. Incluir os novos arquivos `assets/js/panfleto.js`, `assets/css/panfleto.css` e `assets/img/panfleto/`. Não enviar `tests/`, `propostas/`, servidor local, README ou PDF de demonstração como arquivos de produção. Não precisa modificar DNS, CNAME ou instalar framework. Esta entrega **não foi publicada**.
 
 
 
