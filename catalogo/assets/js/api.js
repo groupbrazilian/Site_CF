@@ -23,7 +23,8 @@
       const imagens = (Array.isArray(p.imagens) ? p.imagens : []).filter(Boolean).map(img => {
         const url = safeURL(typeof img === 'string' ? img : img.url);
         const thumbnail = safeURL(typeof img === 'string' ? img : img.thumbnail) || url;
-        return {url: url || thumbnail, thumbnail, nome: clean(img.nome), id: clean(img.id)};
+        const url_original = safeURL(typeof img === 'string' ? img : img.url_original);
+        return {url: url || thumbnail || url_original, thumbnail: thumbnail || url_original, url_original, nome: clean(img.nome), id: clean(img.id)};
       }).filter(img => img.url);
       const declaredCount = Number(p.quantidade_imagens);
       const quantidade_imagens = p.quantidade_imagens != null && clean(p.quantidade_imagens) !== '' && Number.isFinite(declaredCount) && declaredCount >= 0 ? Math.floor(declaredCount) : imagens.length;
@@ -35,7 +36,7 @@
       descricao, aplicacao: clean(p.aplicacao ?? p['Aplicação']),
       estoque_pr: stock(p.estoque_pr ?? p['Estoque PR']), estoque_sc: stock(p.estoque_sc ?? p['Estoque SC']),
       estoque_pr_preenchido: hasStock(p.estoque_pr ?? p['Estoque PR']), estoque_sc_preenchido: hasStock(p.estoque_sc ?? p['Estoque SC']),
-      status: clean(p.status ?? p['Status']) || 'Sob consulta', imagem: safeURL(p.imagem) || imagens[0]?.thumbnail || '',
+      status: clean(p.status ?? p['Status']) || 'Sob consulta', imagem: safeURL(p.imagem) || imagens[0]?.thumbnail || safeURL(p.imagem_grande) || '',
       imagem_grande: safeURL(p.imagem_grande) || imagens[0]?.url || safeURL(p.imagem),
       imagens, quantidade_imagens
     }; }).filter(p => (p.codigo || p.nome) && fold(p.prioridade) !== 'inativo').sort((a,b) => {
@@ -52,20 +53,21 @@
   }
   function stock(value) { if (value == null || clean(value) === '') return 'Sob consulta'; const n = Number(value); return Number.isFinite(n) && n >= 0 ? String(n) : 'Sob consulta'; }
   function hasStock(value) {return value != null && clean(value) !== '' && Number.isFinite(Number(value)) && Number(value) >= 0;}
-  let cache, pending;
+  let pending;
   async function getProducts(force = false, demo = CF_CONFIG.USE_MOCK_DATA) {
-    if (cache && !force && cache.demo === demo) return cache;
     if (pending) return pending;
     pending = (async () => {
       const controller = new AbortController(); const timer = setTimeout(() => controller.abort(), CF_CONFIG.REQUEST_TIMEOUT_MS);
       try {
-        const response = await fetch(demo ? CF_CONFIG.MOCK_URL : CF_CONFIG.API_URL, {signal: controller.signal, cache:'no-store', credentials:'omit'});
+        const endpoint = new URL(demo ? CF_CONFIG.MOCK_URL : CF_CONFIG.API_URL, location.href);
+        endpoint.searchParams.set('_cf',Date.now().toString());
+        const response = await fetch(endpoint.href, {signal: controller.signal, cache:'no-store', credentials:'omit'});
         if (!response.ok) throw new Error('A base está indisponível (HTTP ' + response.status + ').');
         const body = await response.text();
         if (/^\s*</.test(body)) throw new Error('A API retornou uma página de login ou HTML em vez dos dados públicos.');
         let raw; try {raw = JSON.parse(body);} catch {throw new Error('A resposta da API não é um JSON válido.');}
         if (raw.success === false || raw.sucesso === false || raw.error) throw new Error('A API informou um erro ao consultar a base.');
-        cache = {products: normalize(raw), demo, fetchedAt: new Date()}; return cache;
+        return {products: normalize(raw), demo, fetchedAt: new Date()};
       } catch (e) {
         if (e.name === 'AbortError') throw new Error('A consulta demorou mais que o esperado. Tente novamente.');
         if (e instanceof TypeError) throw new Error('Não foi possível acessar a API. Verifique a conexão e o acesso público/CORS da implantação do Google Apps Script.');
@@ -73,6 +75,6 @@
       } finally {clearTimeout(timer); pending = undefined;}
     })(); return pending;
   }
-  window.CF_API = {getProducts, normalize, fold, safeURL};
+  const imageURLs = (p, large=false) => [...new Set((large ? [p.imagem_grande,p.imagens?.[0]?.url,p.imagem,p.imagens?.[0]?.thumbnail,p.imagens?.[0]?.url_original] : [p.imagem,p.imagens?.[0]?.thumbnail,p.imagem_grande,p.imagens?.[0]?.url,p.imagens?.[0]?.url_original]).map(safeURL).filter(Boolean))];
+  window.CF_API = {getProducts, normalize, fold, safeURL, imageURLs};
 })();
-
