@@ -1,5 +1,9 @@
 # Catálogo digital CF Industrial
 
+## Exceção autorizada para exportação do panfleto — 14/10/2026
+
+O catálogo continua usando apenas as URLs recebidas na API. Exclusivamente no panfleto, após tentar essas URLs, permite-se o endereço `lh3.googleusercontent.com/d/ID=w1600` para o mesmo identificador de arquivo presente no link público do Drive. Essa exceção foi autorizada para contornar o bloqueio de leitura de pixels/CORS do endpoint de miniaturas na exportação PNG. Não consulta pastas ou famílias, não copia arquivos para terceiros, não altera fotos ou permissões, e não modifica o Apps Script. Fotos continuam exigindo acesso público. O serviço de imagens permanece dependente do Google.
+
 ## Revisão de imagens e atualização — 14/10/2026
 
 As imagens usam exclusivamente URLs recebidas em `imagem`, `imagem_grande` e `imagens` (incluindo `url`, `thumbnail` e `url_original` quando fornecidos). Não se monta endereço do Drive nem se consulta pasta por Família. Cards e detalhes tentam as alternativas fornecidas pela API antes de mostrar a reserva. A Família participa apenas da apresentação e organização. O panfleto também usa somente URLs da API; exportar fotos exige que o servidor da imagem permita leitura pelo navegador.

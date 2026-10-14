@@ -6,7 +6,16 @@
   const clean=v=>v==null?'':String(v).trim();
   function image(url,cors=false){return new Promise((resolve,reject)=>{const i=new Image();if(cors)i.crossOrigin='anonymous';const timer=setTimeout(()=>{i.src='';reject(new Error('Tempo de carregamento da foto excedido.'));},15000);i.onload=()=>{clearTimeout(timer);resolve(i)};i.onerror=()=>{clearTimeout(timer);reject(new Error('Imagem indisponível.'))};i.src=url;});}
   function photoURLs(p){
-    return CF_API.imageURLs(p,true);
+    const supplied=CF_API.imageURLs(p,true),exportURLs=[];
+    // Flyer-only export fallback: the exact same public Drive file, never a family/folder lookup.
+    for(const value of supplied){
+      const url=new URL(value);
+      if(url.hostname==='drive.google.com'){
+        const id=url.searchParams.get('id')||url.pathname.match(/\/d\/([\w-]+)/)?.[1];
+        if(id&&/^[\w-]+$/.test(id))exportURLs.push('https://lh3.googleusercontent.com/d/'+id+'=w1600');
+      }
+    }
+    return [...new Set([...supplied,...exportURLs])];
   }
   async function photo(p){for(const url of photoURLs(p)){try{const img=await image(url,true);return {img,url};}catch{}}return null;}
   function font(size,weight=400){ctx.font=`${weight} ${size}px Arial, Helvetica, sans-serif`;}

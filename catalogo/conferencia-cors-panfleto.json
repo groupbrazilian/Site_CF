@@ -1,0 +1,53 @@
+[
+  {
+    "code": "TK1717",
+    "mode": "api-display",
+    "loaded": true,
+    "exported": false
+  },
+  {
+    "code": "TK1717",
+    "mode": "api-export",
+    "loaded": false
+  },
+  {
+    "code": "TK1717",
+    "mode": "same-file-export",
+    "loaded": true,
+    "exported": true
+  },
+  {
+    "code": "TK200A",
+    "mode": "api-display",
+    "loaded": true,
+    "exported": false
+  },
+  {
+    "code": "TK200A",
+    "mode": "api-export",
+    "loaded": false
+  },
+  {
+    "code": "TK200A",
+    "mode": "same-file-export",
+    "loaded": true,
+    "exported": true
+  },
+  {
+    "code": "TK011",
+    "mode": "api-display",
+    "loaded": true,
+    "exported": false
+  },
+  {
+    "code": "TK011",
+    "mode": "api-export",
+    "loaded": false
+  },
+  {
+    "code": "TK011",
+    "mode": "same-file-export",
+    "loaded": true,
+    "exported": true
+  }
+]
