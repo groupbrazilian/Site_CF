@@ -28,13 +28,13 @@
     if(!entries.length)return '';
     return detail ? entries.map(e=>`<dt>Estoque ${e[1]}</dt><dd>${esc(e[2])}</dd>`).join('') : `<div class="stock">${entries.map(e=>'<span>Estoque '+e[0]+' · '+esc(e[2])+'</span>').join('')}</div>`;
   }
-  function picture(url, name, cls = '') {return `<img class="${cls}" src="${esc(url || CF_CONFIG.PLACEHOLDER)}" alt="${esc(name)}" loading="lazy" decoding="async">`;}
-  function wireImages(root) {root.querySelectorAll('img').forEach(img => img.addEventListener('error', () => {img.src = CF_CONFIG.PLACEHOLDER;}, {once:true}));}
+  function picture(url, name, cls = '') {const urls=(Array.isArray(url)?url:[url]).filter(Boolean);return `<img class="${cls}" src="${esc(urls[0] || CF_CONFIG.PLACEHOLDER)}" data-image-urls="${esc(JSON.stringify(urls))}" data-image-index="0" alt="${esc(name)}" loading="lazy" decoding="async">`;}
+  function wireImages(root) {root.querySelectorAll('img').forEach(img => {img.onerror=()=>{const urls=JSON.parse(img.dataset.imageUrls||'[]'),next=Number(img.dataset.imageIndex||0)+1;img.dataset.imageIndex=next;if(next<urls.length)img.src=urls[next];else {img.onerror=null;img.src=CF_CONFIG.PLACEHOLDER;}};if(img.complete&&!img.naturalWidth)img.onerror();});}
   function categoryId(t, c) {return 'categoria-' + products.find(p => p.familia === t && p.categoria === c)?.id;}
   function active() {return products.filter(p => fold(p.status) !== 'inativo');}
   function categoryOpening(t,c,group,number) {
     const photos = group.filter(p=>p.imagem).slice(0,4);
-    const tiles = photos.map(p=>`<figure>${picture(p.imagem,p.nome)}<figcaption>${esc(p.codigo)}</figcaption></figure>`).join('');
+    const tiles = photos.map(p=>`<figure>${picture(CF_API.imageURLs(p),p.nome)}<figcaption>${esc(p.codigo)}</figcaption></figure>`).join('');
     return `<section id="${categoryId(t,c)}" class="sheet category-divider category-editorial"><div class="running">${context(t,c)}<span>${group.length} ITENS</span></div><div class="category-band"><span>CF INDUSTRIAL / ${esc(t)}</span></div><p class="eyebrow">PRECISÃO POR ESPECIALIDADE</p><h2>${esc(c)}<span class="orange">.</span></h2><div class="category-mosaic${photos.length <= 1 ? ' mosaic-single' : ''}">${tiles || `<figure>${picture(CF_CONFIG.PLACEHOLDER,c)}<figcaption>CF INDUSTRIAL</figcaption></figure>`}</div><div class="category-bottom"><span>${group.length} ${group.length === 1 ? 'item' : 'itens'} nesta coleção</span><span>ESPECIFICAÇÕES · APLICAÇÕES · SOLUÇÕES</span></div>${footer(c,number)}</section>`;
   }
   function allFamilies() {return [...families, ...new Set(products.map(p=>p.familia).filter(f=>!families.includes(f)))];}
@@ -55,8 +55,8 @@
     const multiple = p.quantidade_imagens >= 2;
     const wide = multiple || p.familia === 'Máquinas' || p.familia === 'Serviços';
     const count = Math.max(p.quantidade_imagens, p.imagens.length);
-    const urls = [p.imagem || p.imagens[0]?.thumbnail || ''];
-    if (multiple) urls.push(p.imagens[1]?.thumbnail || p.imagens[1]?.url || '');
+    const urls = [CF_API.imageURLs(p)];
+    if (multiple) urls.push([p.imagens[1]?.thumbnail,p.imagens[1]?.url,p.imagens[1]?.url_original].filter(Boolean));
     return `<article class="product ${multiple ? 'ferramenta-multipla' : 'ferramenta-simples'}${wide ? ' product-wide' : ''}" data-code="${esc(p.codigo)}"><div class="product-photos">${urls.map((url, i) => `<div class="product-image" data-detail="${p.id}" role="img" aria-label="${esc(p.nome)} — foto ${i+1}">${picture(url, `${p.nome} — foto ${i+1}`)}</div>`).join('')}${count > 2 ? `<span class="extra-photos">+ ${count - 2} ${count - 2 === 1 ? 'foto' : 'fotos'}</span>` : ''}</div><div class="product-copy"><div class="product-meta"><span class="code">${esc(p.codigo)}</span>${fold(p.status) !== 'ativo' ? `<span class="status">${esc(p.status)}</span>` : ''}</div><h3 class="product-name">${esc(p.nome)}</h3>${p.categoria_preenchida ? `<p class="category-label">${esc(p.categoria)}</p>` : ''}${p.aplicacao ? `<div class="technical"><h4>Aplicação</h4><p>${esc(p.aplicacao)}</p></div>` : ''}${p.descricao && !p.nome_por_descricao ? `<div class="technical description"><h4>Descrição técnica</h4><p>${esc(p.descricao)}</p></div>` : ''}${stockHTML(p)}<div class="product-actions"><button class="detail-link" data-detail="${p.id}">Ver detalhes +</button>${flyerLink(p)}<a class="quote" href="${esc(whatsapp(p))}" target="_blank" rel="noopener">${esc(cta(p))} ↗</a></div><a class="print-qr" data-qr-url="${esc(digitalURL(p))}" href="${esc(digitalURL(p))}"><span class="qr-symbol"></span><span>Ver produto digital<br><small>Mais imagens e informações</small></span></a></div></article>`;
   }
   function paginate(group) {
@@ -104,12 +104,12 @@
   }
   function openDetail(id) {
     const p = products.find(p => p.id === id); if (!p) return;
-    const gallery = p.imagens.length ? p.imagens.map((img,i) => ({...img, url: i === 0 ? p.imagem_grande || img.url : img.url})) : [{url:p.imagem_grande || p.imagem, thumbnail:p.imagem, nome:p.nome}].filter(img=>img.url);
+    const gallery = p.imagens.length ? p.imagens.map((img,i) => ({...img, urls:i===0?CF_API.imageURLs(p,true):[img.url,img.thumbnail,img.url_original].filter(Boolean), url: i === 0 ? p.imagem_grande || img.url : img.url})) : [{url:p.imagem_grande || p.imagem,urls:CF_API.imageURLs(p,true), thumbnail:p.imagem, nome:p.nome}].filter(img=>img.url);
     if (!gallery.length) gallery.push({url:CF_CONFIG.PLACEHOLDER,nome:p.nome});
     lastFocus = document.activeElement;
-    $('#detail-content').innerHTML = `<div class="detail-gallery"><button id="zoom" aria-label="Ampliar imagem">${picture(gallery[0].url,p.nome,'detail-main')}</button><div class="gallery-controls"><button id="prev" aria-label="Imagem anterior">←</button><span id="gallery-count"></span><button id="next" aria-label="Próxima imagem">→</button></div><div class="thumbnails">${gallery.map((img,i) => `<button data-photo="${i}" aria-label="Imagem ${i+1}" aria-pressed="${i===0}">${picture(img.thumbnail || img.url,img.nome || p.nome)}</button>`).join('')}</div><p class="muted">Clique na imagem para ampliar.</p></div><div class="detail-copy"><p class="eyebrow">${esc(p.familia)}${p.categoria_preenchida ? ' / ' + esc(p.categoria) : ''}</p><p class="code">${esc(p.codigo)}</p><h2 id="detail-title">${esc(p.nome)}</h2><p class="status">${esc(p.status)}</p><dl>${p.aplicacao ? `<dt>Aplicação</dt><dd>${esc(p.aplicacao)}</dd>` : ''}${p.descricao && !p.nome_por_descricao ? `<dt>Descrição técnica</dt><dd>${esc(p.descricao)}</dd>` : ''}${stockHTML(p,true)}</dl><a class="button primary" href="${esc(whatsapp(p))}" target="_blank" rel="noopener">${esc(cta(p))} pelo WhatsApp ↗</a><div class="detail-flyer-action">${flyerLink(p)}</div></div>`;
+    $('#detail-content').innerHTML = `<div class="detail-gallery"><button id="zoom" aria-label="Ampliar imagem">${picture(gallery[0].url,p.nome,'detail-main')}</button><div class="gallery-controls"><button id="prev" aria-label="Imagem anterior">←</button><span id="gallery-count"></span><button id="next" aria-label="Próxima imagem">→</button></div><div class="thumbnails">${gallery.map((img,i) => `<button data-photo="${i}" aria-label="Imagem ${i+1}" aria-pressed="${i===0}">${picture([img.thumbnail,img.url,img.url_original].filter(Boolean),img.nome || p.nome)}</button>`).join('')}</div><p class="muted">Clique na imagem para ampliar.</p></div><div class="detail-copy"><p class="eyebrow">${esc(p.familia)}${p.categoria_preenchida ? ' / ' + esc(p.categoria) : ''}</p><p class="code">${esc(p.codigo)}</p><h2 id="detail-title">${esc(p.nome)}</h2><p class="status">${esc(p.status)}</p><dl>${p.aplicacao ? `<dt>Aplicação</dt><dd>${esc(p.aplicacao)}</dd>` : ''}${p.descricao && !p.nome_por_descricao ? `<dt>Descrição técnica</dt><dd>${esc(p.descricao)}</dd>` : ''}${stockHTML(p,true)}</dl><a class="button primary" href="${esc(whatsapp(p))}" target="_blank" rel="noopener">${esc(cta(p))} pelo WhatsApp ↗</a><div class="detail-flyer-action">${flyerLink(p)}</div></div>`;
     let index = 0;
-    const select = i => {index = (i + gallery.length) % gallery.length; $('.detail-main').src = gallery[index].url; $('#gallery-count').textContent = `${index+1} / ${gallery.length}`; document.querySelectorAll('[data-photo]').forEach(b => b.setAttribute('aria-pressed',Number(b.dataset.photo) === index));};
+    const select = i => {index = (i + gallery.length) % gallery.length; const img=$('.detail-main'),urls=gallery[index].urls||[gallery[index].url];img.dataset.imageUrls=JSON.stringify(urls);img.dataset.imageIndex='0';img.src=urls[0];wireImages($('#zoom'));$('#gallery-count').textContent = `${index+1} / ${gallery.length}`; document.querySelectorAll('[data-photo]').forEach(b => b.setAttribute('aria-pressed',Number(b.dataset.photo) === index));};
     $('#prev').onclick = () => select(index-1); $('#next').onclick = () => select(index+1);
     document.querySelectorAll('[data-photo]').forEach(b => b.onclick = () => select(Number(b.dataset.photo)));
     $('#zoom').onclick = () => {$('#detail').classList.toggle('zoomed');};
@@ -209,6 +209,7 @@
   window.addEventListener('afterprint',render);
   window.CF_CATALOG = {preparePrint};
   document.querySelectorAll('.print-button').forEach(b=>b.addEventListener('click',print));
+  window.addEventListener('pageshow',event=>{if(event.persisted)load(true);});
   load();
 })();
 

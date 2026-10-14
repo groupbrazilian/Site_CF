@@ -1,5 +1,13 @@
 # Catálogo digital CF Industrial
 
+## Revisão de imagens e atualização — 14/10/2026
+
+As imagens usam exclusivamente URLs recebidas em `imagem`, `imagem_grande` e `imagens` (incluindo `url`, `thumbnail` e `url_original` quando fornecidos). Não se monta endereço do Drive nem se consulta pasta por Família. Cards e detalhes tentam as alternativas fornecidas pela API antes de mostrar a reserva. A Família participa apenas da apresentação e organização. O panfleto também usa somente URLs da API; exportar fotos exige que o servidor da imagem permita leitura pelo navegador.
+
+A consulta usa `cache: no-store` e um identificador novo na URL da API. Respostas concluídas não são reaproveitadas em memória. Atualizar dados faz nova consulta; voltar a uma página restaurada pelo navegador também consulta novamente. Os arquivos de JavaScript estão versionados no HTML para evitar código antigo em cache.
+
+Conferência com a API real: MCVT e SERV01 carregaram fotos nos cards e detalhes. TK200A e TK011 vieram como Componentes com URLs preenchidas, mas seus endereços retornaram HTML de login do Google em vez de imagem, tanto no navegador quanto na consulta direta sem autenticação. Esses arquivos precisam estar públicos; preenchimento do campo não garante acesso à imagem. Não houve alteração no Apps Script ou nas permissões do Drive. Evidências: `conferencia-imagens-resultados.json` e `conferencia-*.png`; script de conferência: `conferir-imagens.cjs`. Esses arquivos não são necessários para publicação.
+
 Versão independente em `catalogo/`. O site institucional não foi alterado. Nenhuma publicação, deploy, operação no GitHub ou alteração de DNS foi realizada.
 
 ## Panfleto automático por item

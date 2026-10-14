@@ -1,0 +1,82 @@
+{
+  "results": [
+    {
+      "code": "TK200A",
+      "cardImages": [
+        {
+          "url": "http://127.0.0.1:4173/catalogo/assets/img/placeholder.svg",
+          "loaded": false,
+          "width": 600
+        },
+        {
+          "url": "http://127.0.0.1:4173/catalogo/assets/img/placeholder.svg",
+          "loaded": false,
+          "width": 600
+        }
+      ],
+      "detail": {
+        "url": "http://127.0.0.1:4173/catalogo/assets/img/placeholder.svg",
+        "loaded": false,
+        "width": 600
+      },
+      "context": "Componentes / Componentes e Acessórios"
+    },
+    {
+      "code": "TK011",
+      "cardImages": [
+        {
+          "url": "http://127.0.0.1:4173/catalogo/assets/img/placeholder.svg",
+          "loaded": false,
+          "width": 600
+        },
+        {
+          "url": "http://127.0.0.1:4173/catalogo/assets/img/placeholder.svg",
+          "loaded": false,
+          "width": 600
+        }
+      ],
+      "detail": {
+        "url": "http://127.0.0.1:4173/catalogo/assets/img/placeholder.svg",
+        "loaded": false,
+        "width": 600
+      },
+      "context": "Componentes / Componentes e Acessórios"
+    },
+    {
+      "code": "MCVT",
+      "cardImages": [
+        {
+          "url": "https://drive.google.com/thumbnail?id=1JAfTqXgyY2Y0qM-8HDIJvlSsHEA_LguS&sz=w800",
+          "loaded": true,
+          "width": 800
+        }
+      ],
+      "detail": {
+        "url": "https://drive.google.com/thumbnail?id=1JAfTqXgyY2Y0qM-8HDIJvlSsHEA_LguS&sz=w1600",
+        "loaded": true,
+        "width": 800
+      },
+      "context": "Máquinas / CVT — Polias e Bombas"
+    },
+    {
+      "code": "SERV01",
+      "cardImages": [
+        {
+          "url": "https://drive.google.com/thumbnail?id=1QgGznsh7qZlk1XFMmhNWi6-DomyzBEkz&sz=w800",
+          "loaded": true,
+          "width": 800
+        }
+      ],
+      "detail": {
+        "url": "https://drive.google.com/thumbnail?id=1QgGznsh7qZlk1XFMmhNWi6-DomyzBEkz&sz=w1600",
+        "loaded": true,
+        "width": 1600
+      },
+      "context": "Serviços / Testes e Reparos"
+    }
+  ],
+  "requests": [
+    "https://script.google.com/a/macros/cfindustrial.com.br/s/AKfycbxUdSTS9542G18CdDvyFkO9xteZCSDFhraw2mjK0UXm_kbEYVCeYHTM1iv1CL4jAf0U6w/exec?_cf=1791990283895",
+    "https://script.google.com/a/macros/cfindustrial.com.br/s/AKfycbxUdSTS9542G18CdDvyFkO9xteZCSDFhraw2mjK0UXm_kbEYVCeYHTM1iv1CL4jAf0U6w/exec?_cf=1791990300306"
+  ]
+}

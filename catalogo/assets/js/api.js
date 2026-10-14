@@ -78,3 +78,4 @@
   const imageURLs = (p, large=false) => [...new Set((large ? [p.imagem_grande,p.imagens?.[0]?.url,p.imagem,p.imagens?.[0]?.thumbnail,p.imagens?.[0]?.url_original] : [p.imagem,p.imagens?.[0]?.thumbnail,p.imagem_grande,p.imagens?.[0]?.url,p.imagens?.[0]?.url_original]).map(safeURL).filter(Boolean))];
   window.CF_API = {getProducts, normalize, fold, safeURL, imageURLs};
 })();
+

@@ -6,9 +6,7 @@
   const clean=v=>v==null?'':String(v).trim();
   function image(url,cors=false){return new Promise((resolve,reject)=>{const i=new Image();if(cors)i.crossOrigin='anonymous';const timer=setTimeout(()=>{i.src='';reject(new Error('Tempo de carregamento da foto excedido.'));},15000);i.onload=()=>{clearTimeout(timer);resolve(i)};i.onerror=()=>{clearTimeout(timer);reject(new Error('Imagem indisponível.'))};i.src=url;});}
   function photoURLs(p){
-    const urls=[p.imagem_grande,p.imagem,p.imagens?.[0]?.url,p.imagens?.[0]?.thumbnail].map(CF_API.safeURL).filter(Boolean),result=[];
-    for(const value of urls){const u=new URL(value);if(u.hostname==='drive.google.com'){const id=u.searchParams.get('id')||u.pathname.match(/\/d\/([\w-]+)/)?.[1];if(id&&/^[\w-]+$/.test(id))result.push('https://lh3.googleusercontent.com/d/'+id+'=w1600');}result.push(value);}
-    return [...new Set(result)];
+    return CF_API.imageURLs(p,true);
   }
   async function photo(p){for(const url of photoURLs(p)){try{const img=await image(url,true);return {img,url};}catch{}}return null;}
   function font(size,weight=400){ctx.font=`${weight} ${size}px Arial, Helvetica, sans-serif`;}
@@ -49,10 +47,10 @@
     if(location.protocol==='file:'){
       // Local file images have opaque origins and would taint the export canvas.
       // Load embedded brand assets only in file mode; HTTP keeps its existing lazy images.
-      if(!window.CF_FLYER_ASSETS)await new Promise((resolve,reject)=>{const script=document.createElement('script');script.src='assets/js/panfleto-assets.js';script.onload=resolve;script.onerror=()=>reject(new Error('Não foi possível carregar as logos. Abra o catálogo pelo endereço local http://127.0.0.1:4173/catalogo/.'));document.head.append(script);});
+      if(!window.CF_FLYER_ASSETS)await new Promise((resolve,reject)=>{const script=document.createElement('script');script.src='assets/js/panfleto-assets.js?v=20261014';script.onload=resolve;script.onerror=()=>reject(new Error('Não foi possível carregar as logos. Abra o catálogo pelo endereço local http://127.0.0.1:4173/catalogo/.'));document.head.append(script);});
       return Promise.all([image(CF_FLYER_ASSETS.cf),image(CF_FLYER_ASSETS.brazilian)]);
     }
-    return Promise.all([image('assets/img/panfleto/cf-logo.png',true),image('assets/img/panfleto/brazilian-referencia.png',true)]);
+    return Promise.all([image('assets/img/panfleto/cf-logo.png',true),image('assets/img/panfleto/brazilian-referencia.png?v=20261014',true)]);
   }
   async function printDensity(blob){
     // Set PNG physical resolution to 300 dpi without resampling or recompressing the artwork.
@@ -85,8 +83,10 @@
     rect(64,footerY+20,952,94,'#171718');rect(64,footerY+20,5,94,orange);ctx.drawImage(icons[0],101,footerY+38,56,56);text('FALE COM A CF INDUSTRIAL · WHATSAPP',183,footerY+36,12,'#bfbfc2');
     const number=clean(CF_CONFIG.WHATSAPP).replace(/^55/,'');const display=number.length===11?`(${number.slice(0,2)}) ${number.slice(2,7)}-${number.slice(7)}`:CF_CONFIG.WHATSAPP;text(display,183,footerY+60,46,white,750);
     font(25);const site='www.cfindustrial.com.br';text(site,(1080-ctx.measureText(site).width)/2,footerY+134,25,'#eee');
-    const socialY=footerY+177;icons.slice(1).forEach((img,i)=>ctx.drawImage(img,337+i*42,socialY,25,25));rect(513,socialY,1,25,'#4d4d50');text('@oficial.cfindustrial',539,socialY,22,'#cbcbce');rule(64,footerY+220,952,'#2c2c2e');
-    text('DISTRIBUIDOR',316,footerY+254,14,'#99999f');text('OFICIAL',316,footerY+276,14,'#99999f');ctx.drawImage(brazilian,374,281,530,146,478,footerY+239,260,72);
+    const socialY=footerY+177;icons.slice(1).forEach((img,i)=>ctx.drawImage(img,337+i*42,socialY,25,25));rect(513,socialY,1,25,'#000000');text('@oficial.cfindustrial',539,socialY,22,'#cbcbce');rule(64,footerY+220,952,'#2c2c2e');
+    text('DISTRIBUIDOR',316,footerY+254,14,'#99999f');text('OFICIAL',316,footerY+276,14,'#99999f');
+    const logoScale=Math.min(260/brazilian.naturalWidth,90/brazilian.naturalHeight),logoWidth=brazilian.naturalWidth*logoScale,logoHeight=brazilian.naturalHeight*logoScale;
+    ctx.drawImage(brazilian,478+(260-logoWidth)/2,footerY+239+(90-logoHeight)/2,logoWidth,logoHeight);
     const rawBlob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));if(!rawBlob)throw new Error('Não foi possível preparar a imagem para download.');const blob=await printDensity(rawBlob);posterURL=URL.createObjectURL(blob);$('poster').src=posterURL;$('poster').alt=`${p.codigo} — ${p.nome}. ${blocks.map(b=>b.label+': '+b.value).join(' ')}. CF Industrial, WhatsApp ${display}, www.cfindustrial.com.br, @oficial.cfindustrial. Distribuidor oficial Brazilian Imports.`;await $('poster').decode();$('poster').hidden=false;
     return {photoSource:photoResult?.url||'',photoLoaded:Boolean(photoResult),width:canvas.width,height:canvas.height,paper:'A5',printWidthMM:148,printHeightMM:210};
   }
