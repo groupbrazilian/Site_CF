@@ -13,11 +13,15 @@
   // Snapshot only on click: the flyer opens independently and reuses the item already consulted.
   document.addEventListener('click',e => {
     const link=e.target.closest('[data-flyer]');if(!link)return;
+    e.preventDefault();
     const p=products.find(p=>p.id===Number(link.dataset.flyer));if(!p)return;
     const token=Date.now().toString(36),url=new URL(link.href);
     const selected=link.closest('#detail')?.querySelector('.detail-main')?.src;
     const item={codigo:p.codigo,nome:p.nome,familia:p.familia,categoria:p.categoria,categoria_preenchida:p.categoria_preenchida,descricao:p.descricao,nome_por_descricao:p.nome_por_descricao,aplicacao:p.aplicacao,imagem:p.imagem,imagem_grande:selected&&!selected.includes('placeholder.svg')?selected:p.imagem_grande,imagens:p.imagens};
-    try{localStorage.setItem('cf-panfleto:'+p.codigo,JSON.stringify({token,createdAt:Date.now(),item}));url.searchParams.set('ref',token);link.href=url.href;}catch{/* Direct link remains functional through the API if browser storage is unavailable. */}
+    try{localStorage.setItem('cf-panfleto:'+p.codigo,JSON.stringify({token,createdAt:Date.now(),item}));url.searchParams.set('ref',token);}catch{/* Direct link remains functional through the API if browser storage is unavailable. */}
+    let picker=$('#flyer-contacts');if(!picker){picker=document.createElement('dialog');picker.id='flyer-contacts';document.body.append(picker);}
+    picker.innerHTML=`<button class="close" aria-label="Fechar escolha de contato">×</button><h2>Qual contato vai no panfleto?</h2><p>Escolha o atendimento que aparecerá na arte de ${esc(p.codigo)}.</p><div class="flyer-contact-options">${CF_CONFIG.CONTACTS.map(c=>{const contactURL=new URL(url);contactURL.searchParams.set('contato',c.id);return `<a class="button" target="_blank" rel="noopener" href="${esc(contactURL.href)}"><strong>${esc(c.name)}</strong><span>${esc(c.region)} · ${esc(c.phone.slice(2).replace(/^(\d{2})(\d{5})(\d{4})$/,'($1) $2-$3'))}</span>${c.phone===CF_CONFIG.WHATSAPP?'<small>Contato principal</small>':''}</a>`;}).join('')}</div>`;
+    picker.querySelector('.close').onclick=()=>picker.close();picker.querySelectorAll('a').forEach(a=>a.onclick=()=>picker.close());picker.addEventListener('close',()=>link.focus(),{once:true});picker.showModal();
   });
   const footer = (label, number) => `<footer class="folio"><span>CF INDUSTRIAL / ${esc(label)}</span><span>CATÁLOGO TÉCNICO</span><span>${String(number).padStart(2,'0')}</span></footer>`;
   const context = (family,category) => `<span class="section-context"><strong>${esc(family)}</strong>${category && category !== 'Sem categoria' ? '<span class="context-slash">/</span><span class="context-category">'+esc(category)+'</span>' : ''}</span>`;
@@ -209,6 +213,9 @@
   window.addEventListener('afterprint',render);
   window.CF_CATALOG = {preparePrint};
   document.querySelectorAll('.print-button').forEach(b=>b.addEventListener('click',print));
+  const contactList=document.createElement('div');contactList.className='regional-contacts';
+  contactList.innerHTML=['Santa Catarina','Curitiba / PR'].map(region=>`<section><h3>${esc(region)}</h3>${CF_CONFIG.CONTACTS.filter(c=>c.region===region).map(c=>`<p><strong>${esc(c.name)}</strong>${c.phone===CF_CONFIG.WHATSAPP?' <small>Principal</small>':''}<br><a href="https://wa.me/${esc(c.phone)}" target="_blank" rel="noopener">${esc(c.phone.slice(2).replace(/^(\d{2})(\d{5})(\d{4})$/,'($1) $2-$3'))} ↗</a></p>`).join('')}</section>`).join('');
+  $('#contato .contact-grid').after(contactList);
   window.addEventListener('pageshow',event=>{if(event.persisted)load(true);});
   load();
 })();

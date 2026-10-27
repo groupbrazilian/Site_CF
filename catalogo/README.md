@@ -1,5 +1,25 @@
 # Catálogo digital CF Industrial
 
+## Panfleto conforme mockup — 27/10/2026
+
+Composição com cabeçalho preto, código à direita, título branco em Bebas Neue sobre fundo laranja, foto ampliada na coluna esquerda e caixas pretas de aplicação/descrição à direita. As caixas acompanham a altura da área da foto e ajustam a distribuição ao texto real, sem truncar conteúdo. Corpo dos textos, site, redes e contato usam branco puro para contraste. A faixa de contato inclui WhatsApp, nome e região; o rodapé mantém site, quatro símbolos sociais e Brazilian.
+
+A fonte original fornecida pelo usuário fica em `assets/fonts/BebasNeue-Regular.ttf`, com licença em `assets/fonts/OFL-BebasNeue.txt`; carrega somente no panfleto. A cópia incorporada em `panfleto-assets.js` atende à abertura direta por arquivo. Nenhuma chamada ao Google Fonts ou biblioteca nova foi acrescentada ao catálogo.
+
+Mantidos: dados e imagens reais da API, escolha dos cinco contatos, foto selecionada nos detalhes, geração PNG com 300 dpi e proporção A5, impressão e fallback autorizado do mesmo arquivo público do Google. Testados SERV01, MCVT, TK1717 e TK200A, todos com fotos carregadas e Bebas Neue, além da troca dos contatos e abertura por arquivo. Evidências em `tests/mockup-resultados.json` e `tests/mockup-*.png`.
+
+Publicação manual desta revisão: `panfleto.html`, `assets/js/panfleto.js`, `assets/js/panfleto-assets.js` e a pasta `assets/fonts/` com a fonte e sua licença. Arquivos de teste não são necessários para publicação.
+
+## Layout e contatos do panfleto — 26/10/2026
+
+O panfleto mantém A5 (1748 × 2480 px, 300 dpi), com título menor próximo do cabeçalho, foto ampliada, faixa técnica mais baixa e contato na base do rodapé. Margens brancas transparentizadas são retiradas da área da foto para aproveitar melhor o espaço, preservando seus detalhes e proporção. Os principais controles de composição ficam no objeto `layout`, no início de `assets/js/panfleto.js`: `titleSize`, `titleY`, `titleMaxHeight`, `footerHeight`, `detailSize` e `photoPadding`. `assets/css/panfleto.css` controla a página de prévia, os controles e a impressão; a arte exportada é desenhada pelo JavaScript.
+
+Os contatos ficam em `CONTACTS`, em `assets/js/config.js`, e são usados tanto no fim do catálogo quanto no seletor do panfleto. Santa Catarina aparece primeiro: Thiago (48) 99146-9474, Douglas (48) 99205-7272 e Leandro (48) 99192-7703. Curitiba: Gustavo (41) 98886-8794, principal nos CTAs, e Atendimento Curitiba (41) 98469-0680, preservado. `WHATSAPP` define o contato principal dos CTAs.
+
+Ao clicar em Panfleto no card ou nos detalhes, o leitor escolhe qual contato incluir antes de abrir a nova aba. A própria prévia permite trocar o contato e gerar novamente a arte. Links diretos aceitam `contato=thiago|douglas|leandro|gustavo|curitiba`; sem contato válido, usam Gustavo. O número selecionado é incorporado ao PNG e à impressão. Nenhuma consulta extra à API é feita ao abrir a escolha de contatos.
+
+Conferência: MCVT com imagem real, download PNG A5, cinco contatos, CTA principal, escolha pelo card e pelo detalhe, celular, estilos de impressão e abertura direta por arquivo. Evidências em `tests/layout-contatos-resultados.json` e `tests/MCVT-layout-20261026.png`. Testes e capturas não são arquivos de produção.
+
 ## Exceção autorizada para exportação do panfleto — 14/10/2026
 
 O catálogo continua usando apenas as URLs recebidas na API. Exclusivamente no panfleto, após tentar essas URLs, permite-se o endereço `lh3.googleusercontent.com/d/ID=w1600` para o mesmo identificador de arquivo presente no link público do Drive. Essa exceção foi autorizada para contornar o bloqueio de leitura de pixels/CORS do endpoint de miniaturas na exportação PNG. Não consulta pastas ou famílias, não copia arquivos para terceiros, não altera fotos ou permissões, e não modifica o Apps Script. Fotos continuam exigindo acesso público. O serviço de imagens permanece dependente do Google.
@@ -91,7 +111,7 @@ O índice limpa filtros antes de navegar para a seção. Pesquisa ignora diferen
 
 Os produtos têm apenas dois padrões automáticos: uma imagem vertical à esquerda do texto para `quantidade_imagens <= 1`; duas imagens empilhadas e largura inteira para `quantidade_imagens >= 2`. Mais fotos aparecem como `+ X fotos` no digital e ficam disponíveis no detalhe. Sem quantidade válida, usa-se a extensão de `imagens`. Máquinas e serviços podem usar largura inteira mesmo com uma foto. Aplicação, descrição e categoria aparecem apenas quando preenchidas; Ativo é omitido no card para reduzir ruído, mas permanece no detalhe.
 
-O WhatsApp do catálogo é **(41) 98469-0680**, formato internacional `5541984690680`. Mensagens de produto incluem código e nome recebidos da API.
+O WhatsApp principal do catálogo é **Gustavo — (41) 98886-8794**, formato internacional `5541988868794`. O contato anterior continua disponível na lista de Curitiba. Mensagens de produto incluem código e nome recebidos da API.
 
 Imprimir / Gerar PDF abre a caixa nativa do navegador: selecione Salvar como PDF, papel A4, retrato, escala 100%. Desative os cabeçalhos e rodapés automáticos do navegador. Margens do catálogo: 10 mm. O mesmo conteúdo é usado no digital e na impressão. Controles, botões, orçamento e navegação ficam ocultos; o rodapé impresso mostra somente a página.
 
