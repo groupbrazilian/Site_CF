@@ -1,5 +1,25 @@
 # Catálogo digital CF Industrial
 
+## Catálogo geral e links por vendedor — 28/10/2026
+
+No catálogo geral, Consultar ferramenta/componente e os CTAs de Máquina/Serviço abrem uma escolha de vendedor, nos cards e nos detalhes. O CTA geral de atendimento também permite escolher. Panfleto mantém a seleção. No catálogo acessado com `?vendedor=ID`, consultas vão diretamente ao WhatsApp desse vendedor e os panfletos abrem com seu contato preenchido. O identificador também acompanha links de produto e QR Codes. Retornar do panfleto mantém o vendedor. O catálogo geral não memoriza o vendedor no navegador.
+
+Links após publicação:
+
+- Thiago: `https://www.cfindustrial.com.br/catalogo/?vendedor=thiago`
+- Douglas: `https://www.cfindustrial.com.br/catalogo/?vendedor=douglas`
+- Leandro: `https://www.cfindustrial.com.br/catalogo/?vendedor=leandro`
+- Gustavo: `https://www.cfindustrial.com.br/catalogo/?vendedor=gustavo`
+- Atendimento Curitiba: `https://www.cfindustrial.com.br/catalogo/?vendedor=curitiba`
+
+O fim do catálogo tem um botão para copiar cada link. Essa lista é gerada a partir de `CONTACTS`, em `assets/js/config.js`. Para cadastrar, adicione `{id:'nome-estavel',name:'Nome',region:'Região',phone:'55DDDNUMERO'}`. Para desativar, acrescente `active:false` ou remova a entrada; para definir o principal, mantenha `primary:true` em apenas um vendedor. Regiões, menus e links se ajustam automaticamente. Não reutilize o ID de um vendedor removido para outra pessoa. Publique o `config.js` atualizado e aumente sua versão nos dois HTMLs para evitar cache antigo. `WHATSAPP` permanece por compatibilidade; o campo `primary:true` prevalece na escolha do principal.
+
+O módulo compartilhado `assets/js/contatos.js` valida IDs e números, resolve os links e centraliza a geração de URLs. IDs não existentes/desativados geram aviso: no catálogo, o visitante escolhe outro atendimento; no panfleto, deve selecionar um vendedor válido antes de gerar a arte. Não se usa um número recebido diretamente pela URL.
+
+Verificados: seleção geral/card/detalhe, cinco links pessoais, contato automático do panfleto, troca explícita de vendedor, retorno ao catálogo, QR com atribuição, cópia do link, vendedor inexistente, inclusão de vendedor em nova região e remoção de vendedor, com configuração simulada somente nos testes. Evidência: `tests/vendedores-resultados.json`.
+
+Publicação desta revisão: `index.html`, `panfleto.html`, `assets/js/config.js`, `assets/js/contatos.js` (novo), `assets/js/catalogo.js`, `assets/js/panfleto.js` e `assets/css/catalogo.css`. Sem alteração no Apps Script, GitHub ou hospedagem pelo assistente.
+
 ## Panfleto conforme mockup — 27/10/2026
 
 Composição com cabeçalho preto, código à direita, título branco em Bebas Neue sobre fundo laranja, foto ampliada na coluna esquerda e caixas pretas de aplicação/descrição à direita. As caixas acompanham a altura da área da foto e ajustam a distribuição ao texto real, sem truncar conteúdo. Corpo dos textos, site, redes e contato usam branco puro para contraste. A faixa de contato inclui WhatsApp, nome e região; o rodapé mantém site, quatro símbolos sociais e Brazilian.

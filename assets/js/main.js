@@ -47,23 +47,29 @@
 
   const budgetForm = document.querySelector('[data-whatsapp-form]');
   if (budgetForm) {
+    const language = document.documentElement.lang.split('-')[0];
+    const copy = ({
+      en: {intro:'Hello, I found CF Industrial through your website and would like to request a quote.',name:'Name',company:'Company',service:'Service',material:'Material',dimensions:'Dimensions',quantity:'Quantity',deadline:'Required deadline',details:'Details',missing:'Not provided',define:'To be defined',arrange:'To be agreed',none:'No additional details',attachment:'If needed, I will send a drawing, file or photo in the conversation.'},
+      es: {intro:'Hola, encontré CF Industrial en su sitio web y quisiera solicitar un presupuesto.',name:'Nombre',company:'Empresa',service:'Servicio',material:'Material',dimensions:'Medidas',quantity:'Cantidad',deadline:'Plazo deseado',details:'Detalles',missing:'No informado',define:'Por definir',arrange:'A convenir',none:'Sin detalles adicionales',attachment:'Si es necesario, enviaré un plano, archivo o foto en la conversación.'},
+      pt: {intro:'Olá, encontrei a CF Industrial pelo site e gostaria de solicitar um orçamento.',name:'Nome',company:'Empresa',service:'Serviço',material:'Material',dimensions:'Medidas',quantity:'Quantidade',deadline:'Prazo desejado',details:'Detalhes',missing:'Não informado',define:'A definir',arrange:'A combinar',none:'Sem detalhes adicionais',attachment:'Se necessário, enviarei desenho, arquivo ou foto na sequência.'}
+    })[language] || {};
     budgetForm.addEventListener('submit', (event) => {
       event.preventDefault();
       const data = new FormData(budgetForm);
       const value = key => String(data.get(key) || '').trim();
       const lines = [
-        'Olá, encontrei a CF Industrial pelo site e gostaria de solicitar um orçamento.',
+        copy.intro,
         '',
-        `Nome: ${value('nome')}`,
-        `Empresa: ${value('empresa') || 'Não informado'}`,
-        `Serviço: ${value('servico')}`,
-        `Material: ${value('material') || 'A definir'}`,
-        `Medidas: ${value('medidas') || 'A definir'}`,
-        `Quantidade: ${value('quantidade') || 'A definir'}`,
-        `Prazo desejado: ${value('prazo') || 'A combinar'}`,
-        `Detalhes: ${value('detalhes') || 'Sem detalhes adicionais'}`,
+        `${copy.name}: ${value('nome')}`,
+        `${copy.company}: ${value('empresa') || copy.missing}`,
+        `${copy.service}: ${value('servico')}`,
+        `${copy.material}: ${value('material') || copy.define}`,
+        `${copy.dimensions}: ${value('medidas') || copy.define}`,
+        `${copy.quantity}: ${value('quantidade') || copy.define}`,
+        `${copy.deadline}: ${value('prazo') || copy.arrange}`,
+        `${copy.details}: ${value('detalhes') || copy.none}`,
         '',
-        'Se necessário, enviarei desenho, arquivo ou foto na sequência.'
+        copy.attachment
       ];
       const url = `https://wa.me/5541987517276?text=${encodeURIComponent(lines.join('\n'))}`;
       window.open(url, '_blank', 'noopener,noreferrer');

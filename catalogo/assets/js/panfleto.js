@@ -28,14 +28,12 @@
     margin: 36
   };
 
-  const contacts = CF_CONFIG.CONTACTS;
-
-  let contact =
-    contacts.find(c =>
-      c.id === new URLSearchParams(location.search).get('contato')
-    ) ||
-    contacts.find(c => c.phone === CF_CONFIG.WHATSAPP) ||
-    contacts[0];
+  const contacts = CF_CONTACTS.list;
+  const sellerContext = CF_CONTACTS.resolve(true);
+  let contact = sellerContext.selected || CF_CONTACTS.primary;
+  const catalogBack=new URL('./',location.href);
+  if(sellerContext.personal)catalogBack.searchParams.set('vendedor',contact.id);
+  document.querySelector('.toolbar>a').href=catalogBack.href;
 
   const clean = v => v == null ? '' : String(v).trim();
 
@@ -521,7 +519,8 @@
     contactSelect.append(option);
   }
 
-  contactSelect.value = contact.id;
+  contactSelect.value = contact?.id || '';
+  if(sellerContext.invalid){const option=document.createElement('option');option.value='';option.textContent='Selecione um vendedor disponível';option.disabled=true;contactSelect.prepend(option);contactSelect.value='';}
   contactSelect.disabled = true;
   contactLabel.append(contactSelect);
 
@@ -535,7 +534,9 @@
 
     const url = new URL(location.href);
     url.searchParams.set('contato', contact.id);
+    if(url.searchParams.has('vendedor'))url.searchParams.set('vendedor',contact.id);
     history.replaceState(null, '', url);
+    const back=new URL('./',location.href);if(url.searchParams.has('vendedor'))back.searchParams.set('vendedor',contact.id);document.querySelector('.toolbar>a').href=back.href;
 
     $('download').disabled = true;
     $('print').disabled = true;
@@ -553,6 +554,9 @@
         ready: true
       };
 
+      $('message').textContent='Panfleto A5 pronto com o contato de '+contact.name+'.';
+      $('message').classList.toggle('warning',!rendered.photoLoaded);
+
       $('download').disabled = false;
       $('print').disabled = false;
     } catch (e) {
@@ -563,12 +567,6 @@
     }
   };
 
-  const waitForContact = setInterval(() => {
-    if (window.CF_FLYER) {
-      clearInterval(waitForContact);
-      contactSelect.disabled = !window.CF_FLYER.ready;
-    }
-  }, 100);
 
   // Carregamento inicial.
   (async () => {
@@ -579,10 +577,13 @@
       document.title = item.codigo + ' — Panfleto A5 CF Industrial';
       $('item-label').textContent = item.codigo + ' · ' + item.nome;
 
+      if(!contacts.length||sellerContext.invalid){$('message').textContent=contacts.length?'Este vendedor não está mais disponível. Selecione outro contato para gerar o panfleto.':'Nenhum vendedor está disponível no momento.';window.CF_FLYER={ready:false,invalidSeller:true,item,source:result.source};contactSelect.disabled=!contacts.length;return;}
+
       const rendered = await render(item);
 
       $('download').disabled = false;
       $('print').disabled = false;
+      contactSelect.disabled = false;
 
       $('message').textContent = rendered.photoLoaded
         ? 'Panfleto A5 pronto (148 × 210 mm). PNG: 1748 × 2480 px. Na impressão, escolha A5; se usar A4, mantenha escala 100% para imprimir no tamanho A5.'

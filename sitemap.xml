@@ -1,21 +1,360 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://www.cfindustrial.com.br/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://www.cfindustrial.com.br/empresa/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.cfindustrial.com.br/servicos/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.cfindustrial.com.br/servicos/corte-laser-metais/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.cfindustrial.com.br/servicos/corte-gravacao-laser-co2/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.cfindustrial.com.br/servicos/usinagem-cnc/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.cfindustrial.com.br/servicos/tornearia/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.cfindustrial.com.br/servicos/fresagem/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.cfindustrial.com.br/servicos/soldagem/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.cfindustrial.com.br/servicos/impressao-3d/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.cfindustrial.com.br/servicos/ferramentais-dispositivos/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.cfindustrial.com.br/transmissao-automatica/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.cfindustrial.com.br/transmissao-automatica/ferramentas-especiais/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.cfindustrial.com.br/transmissao-automatica/recuperacao-conversor-torque/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.cfindustrial.com.br/transmissao-automatica/recuperacao-corpo-valvulas/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.cfindustrial.com.br/transmissao-automatica/maquinas-dispositivos/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.cfindustrial.com.br/projetos/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.cfindustrial.com.br/contato/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+<?xml version='1.0' encoding='UTF-8'?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://www.cfindustrial.com.br/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/es/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/en/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/empresa/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/empresa/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/empresa/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/empresa/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/empresa/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/es/empresa/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/empresa/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/empresa/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/empresa/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/empresa/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/en/empresa/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/empresa/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/empresa/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/empresa/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/empresa/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/servicos/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/servicos/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/servicos/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/servicos/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/servicos/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/es/servicos/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/servicos/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/servicos/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/servicos/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/servicos/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/en/servicos/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/servicos/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/servicos/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/servicos/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/servicos/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/servicos/corte-gravacao-laser-co2/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/servicos/corte-gravacao-laser-co2/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/servicos/corte-gravacao-laser-co2/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/servicos/corte-gravacao-laser-co2/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/servicos/corte-gravacao-laser-co2/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/es/servicos/corte-gravacao-laser-co2/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/servicos/corte-gravacao-laser-co2/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/servicos/corte-gravacao-laser-co2/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/servicos/corte-gravacao-laser-co2/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/servicos/corte-gravacao-laser-co2/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/en/servicos/corte-gravacao-laser-co2/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/servicos/corte-gravacao-laser-co2/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/servicos/corte-gravacao-laser-co2/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/servicos/corte-gravacao-laser-co2/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/servicos/corte-gravacao-laser-co2/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/servicos/corte-laser-metais/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/servicos/corte-laser-metais/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/servicos/corte-laser-metais/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/servicos/corte-laser-metais/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/servicos/corte-laser-metais/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/es/servicos/corte-laser-metais/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/servicos/corte-laser-metais/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/servicos/corte-laser-metais/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/servicos/corte-laser-metais/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/servicos/corte-laser-metais/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/en/servicos/corte-laser-metais/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/servicos/corte-laser-metais/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/servicos/corte-laser-metais/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/servicos/corte-laser-metais/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/servicos/corte-laser-metais/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/servicos/ferramentais-dispositivos/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/servicos/ferramentais-dispositivos/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/servicos/ferramentais-dispositivos/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/servicos/ferramentais-dispositivos/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/servicos/ferramentais-dispositivos/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/es/servicos/ferramentais-dispositivos/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/servicos/ferramentais-dispositivos/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/servicos/ferramentais-dispositivos/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/servicos/ferramentais-dispositivos/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/servicos/ferramentais-dispositivos/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/en/servicos/ferramentais-dispositivos/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/servicos/ferramentais-dispositivos/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/servicos/ferramentais-dispositivos/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/servicos/ferramentais-dispositivos/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/servicos/ferramentais-dispositivos/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/servicos/fresagem/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/servicos/fresagem/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/servicos/fresagem/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/servicos/fresagem/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/servicos/fresagem/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/es/servicos/fresagem/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/servicos/fresagem/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/servicos/fresagem/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/servicos/fresagem/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/servicos/fresagem/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/en/servicos/fresagem/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/servicos/fresagem/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/servicos/fresagem/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/servicos/fresagem/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/servicos/fresagem/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/servicos/impressao-3d/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/servicos/impressao-3d/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/servicos/impressao-3d/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/servicos/impressao-3d/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/servicos/impressao-3d/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/es/servicos/impressao-3d/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/servicos/impressao-3d/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/servicos/impressao-3d/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/servicos/impressao-3d/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/servicos/impressao-3d/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/en/servicos/impressao-3d/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/servicos/impressao-3d/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/servicos/impressao-3d/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/servicos/impressao-3d/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/servicos/impressao-3d/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/servicos/soldagem/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/servicos/soldagem/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/servicos/soldagem/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/servicos/soldagem/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/servicos/soldagem/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/es/servicos/soldagem/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/servicos/soldagem/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/servicos/soldagem/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/servicos/soldagem/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/servicos/soldagem/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/en/servicos/soldagem/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/servicos/soldagem/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/servicos/soldagem/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/servicos/soldagem/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/servicos/soldagem/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/servicos/tornearia/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/servicos/tornearia/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/servicos/tornearia/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/servicos/tornearia/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/servicos/tornearia/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/es/servicos/tornearia/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/servicos/tornearia/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/servicos/tornearia/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/servicos/tornearia/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/servicos/tornearia/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/en/servicos/tornearia/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/servicos/tornearia/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/servicos/tornearia/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/servicos/tornearia/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/servicos/tornearia/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/servicos/usinagem-cnc/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/servicos/usinagem-cnc/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/servicos/usinagem-cnc/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/servicos/usinagem-cnc/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/servicos/usinagem-cnc/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/es/servicos/usinagem-cnc/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/servicos/usinagem-cnc/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/servicos/usinagem-cnc/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/servicos/usinagem-cnc/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/servicos/usinagem-cnc/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/en/servicos/usinagem-cnc/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/servicos/usinagem-cnc/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/servicos/usinagem-cnc/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/servicos/usinagem-cnc/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/servicos/usinagem-cnc/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/transmissao-automatica/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/transmissao-automatica/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/transmissao-automatica/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/transmissao-automatica/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/transmissao-automatica/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/es/transmissao-automatica/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/transmissao-automatica/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/transmissao-automatica/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/transmissao-automatica/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/transmissao-automatica/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/en/transmissao-automatica/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/transmissao-automatica/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/transmissao-automatica/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/transmissao-automatica/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/transmissao-automatica/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/transmissao-automatica/ferramentas-especiais/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/transmissao-automatica/ferramentas-especiais/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/transmissao-automatica/ferramentas-especiais/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/transmissao-automatica/ferramentas-especiais/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/transmissao-automatica/ferramentas-especiais/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/es/transmissao-automatica/ferramentas-especiais/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/transmissao-automatica/ferramentas-especiais/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/transmissao-automatica/ferramentas-especiais/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/transmissao-automatica/ferramentas-especiais/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/transmissao-automatica/ferramentas-especiais/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/en/transmissao-automatica/ferramentas-especiais/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/transmissao-automatica/ferramentas-especiais/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/transmissao-automatica/ferramentas-especiais/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/transmissao-automatica/ferramentas-especiais/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/transmissao-automatica/ferramentas-especiais/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/transmissao-automatica/maquinas-dispositivos/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/transmissao-automatica/maquinas-dispositivos/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/transmissao-automatica/maquinas-dispositivos/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/transmissao-automatica/maquinas-dispositivos/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/transmissao-automatica/maquinas-dispositivos/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/es/transmissao-automatica/maquinas-dispositivos/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/transmissao-automatica/maquinas-dispositivos/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/transmissao-automatica/maquinas-dispositivos/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/transmissao-automatica/maquinas-dispositivos/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/transmissao-automatica/maquinas-dispositivos/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/en/transmissao-automatica/maquinas-dispositivos/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/transmissao-automatica/maquinas-dispositivos/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/transmissao-automatica/maquinas-dispositivos/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/transmissao-automatica/maquinas-dispositivos/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/transmissao-automatica/maquinas-dispositivos/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/transmissao-automatica/recuperacao-conversor-torque/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/transmissao-automatica/recuperacao-conversor-torque/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/transmissao-automatica/recuperacao-conversor-torque/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/transmissao-automatica/recuperacao-conversor-torque/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/transmissao-automatica/recuperacao-conversor-torque/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/es/transmissao-automatica/recuperacao-conversor-torque/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/transmissao-automatica/recuperacao-conversor-torque/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/transmissao-automatica/recuperacao-conversor-torque/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/transmissao-automatica/recuperacao-conversor-torque/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/transmissao-automatica/recuperacao-conversor-torque/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/en/transmissao-automatica/recuperacao-conversor-torque/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/transmissao-automatica/recuperacao-conversor-torque/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/transmissao-automatica/recuperacao-conversor-torque/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/transmissao-automatica/recuperacao-conversor-torque/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/transmissao-automatica/recuperacao-conversor-torque/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/transmissao-automatica/recuperacao-corpo-valvulas/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/transmissao-automatica/recuperacao-corpo-valvulas/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/transmissao-automatica/recuperacao-corpo-valvulas/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/transmissao-automatica/recuperacao-corpo-valvulas/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/transmissao-automatica/recuperacao-corpo-valvulas/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/es/transmissao-automatica/recuperacao-corpo-valvulas/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/transmissao-automatica/recuperacao-corpo-valvulas/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/transmissao-automatica/recuperacao-corpo-valvulas/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/transmissao-automatica/recuperacao-corpo-valvulas/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/transmissao-automatica/recuperacao-corpo-valvulas/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/en/transmissao-automatica/recuperacao-corpo-valvulas/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/transmissao-automatica/recuperacao-corpo-valvulas/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/transmissao-automatica/recuperacao-corpo-valvulas/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/transmissao-automatica/recuperacao-corpo-valvulas/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/transmissao-automatica/recuperacao-corpo-valvulas/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/contato/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/contato/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/contato/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/contato/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/contato/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/es/contato/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/contato/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/contato/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/contato/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/contato/"/>
+  </url>
+  <url>
+    <loc>https://www.cfindustrial.com.br/en/contato/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.cfindustrial.com.br/contato/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.cfindustrial.com.br/es/contato/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cfindustrial.com.br/en/contato/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cfindustrial.com.br/contato/"/>
+  </url>
 </urlset>

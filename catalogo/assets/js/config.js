@@ -4,11 +4,13 @@ window.CF_CONFIG = Object.freeze({
   MOCK_URL: 'data/catalogo-mock.json',
   REQUEST_TIMEOUT_MS: 60000,
   WHATSAPP: '5541988868794',
+  // Adicione/remova vendedores somente nesta lista. active:false desativa sem apagar.
+  // Não altere um id já compartilhado. primary:true define o atendimento principal.
   CONTACTS: Object.freeze([
     {id:'thiago',name:'Thiago',region:'Santa Catarina',phone:'5548991469474'},
     {id:'douglas',name:'Douglas',region:'Santa Catarina',phone:'5548992057272'},
     {id:'leandro',name:'Leandro',region:'Santa Catarina',phone:'5548991927703'},
-    {id:'gustavo',name:'Gustavo',region:'Curitiba / PR',phone:'5541988868794'},
+    {id:'gustavo',name:'Gustavo',region:'Curitiba / PR',phone:'5541988868794',primary:true},
     {id:'curitiba',name:'Atendimento Curitiba',region:'Curitiba / PR',phone:'5541984690680'}
   ]),
   DIGITAL_PRODUCT_URL: 'https://www.cfindustrial.com.br/catalogo/',

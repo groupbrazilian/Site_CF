@@ -1,0 +1,18 @@
+{
+  "generalPicker": true,
+  "detailPicker": true,
+  "personal": [
+    "thiago",
+    "douglas",
+    "leandro",
+    "gustavo",
+    "curitiba"
+  ],
+  "flyer": true,
+  "qr": true,
+  "clipboard": true,
+  "invalidSeller": true,
+  "addedSellerAndRegion": true,
+  "removedSeller": true,
+  "noStickySeller": true
+}

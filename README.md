@@ -109,3 +109,19 @@ Principais arquivos:
 - `assets/icons/logo-cf-industrial.png` — símbolo/logo principal
 
 A mesma regra deve ser utilizada para os demais serviços. Não é necessário editar o HTML para trocar a imagem se o nome do arquivo permanecer igual.
+# Revisão do site principal — 28/10/2026
+
+O site principal agora tem versões estáticas completas em português do Brasil (raiz), espanhol (`es/`) e inglês (`en/`). O seletor PT/ES/EN leva à mesma página em outro idioma. São 57 páginas, incluindo compatibilidade de Projetos e páginas 404. Títulos, descrições, textos, perguntas frequentes, atributos acessíveis, formulário e mensagens de WhatsApp foram traduzidos. Não há tradutor externo, fonte remota ou biblioteca de interface.
+
+Projetos sob medida integra `servicos/index.html#projetos` e o menu de Serviços. A antiga rota `projetos/` encaminha à seção equivalente. Contatos tem um botão para o catálogo geral, sem parâmetro de vendedor. O catálogo existente não foi alterado nesta revisão e continua em português.
+
+Toda a tipografia usa a fonte local Bebas Neue. A licença está em `assets/fonts/OFL-BebasNeue.txt`. Favicon PNG/ICO e ícones de dispositivo usam o símbolo CF real. WhatsApp flutuante é verde, com o símbolo oficial; rodapés têm os quatro links sociais confirmados pelo usuário e a assinatura fornecida da PDA Soluções. Mantidos os telefones do site principal, diferentes dos contatos comerciais do catálogo.
+
+As nove imagens grandes usadas pelo site foram convertidas para WebP, de aproximadamente 13,9 MB para 1,1 MB no conjunto. Originais foram preservados; o navegador recebe os arquivos menores. Imagens abaixo da primeira tela carregam sob demanda.
+
+Publicação manual: atualize os HTMLs das pastas do site principal, `index.html`, `404.html`, as novas pastas `en/` e `es/`, `assets/`, `favicon.ico`, `sitemap.xml` e `site.webmanifest`. Veja a relação em `ARQUIVOS-PARA-PUBLICAR-SITE.txt`. Não é necessário reenviar `catalogo/`, `site-tools/` ou as capturas dos testes. Nada foi publicado pelo assistente; CNAME, DNS e Apps Script não foram alterados.
+
+Verificação: 57 páginas com três idiomas e sem links locais quebrados; 21 combinações de páginas/idiomas no navegador, menu de celular, ausência de rolagem lateral, formulário sem envio real de mensagem, botão do catálogo geral, fonte, imagens, assinatura e redes. Resultados em `site-tools/resultado-estatico.json` e `site-tools/resultado-browser.json`. Prévia: `node site-tools/preview.cjs`, depois `http://127.0.0.1:4174/`.
+
+Manutenção das traduções: português nos HTMLs originais; pares inglês/espanhol em `site-tools/traducoes.tsv`, referenciados pelo inventário `site-tools/textos.json`; gerar novamente com `site-tools/gerar_idiomas.py`. Novos textos precisam de tradução nesse dicionário. O script `preparar_site.py` é a preparação inicial desta revisão e não precisa ser repetido para mudar textos.
+
