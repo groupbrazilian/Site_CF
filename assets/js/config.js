@@ -6,7 +6,7 @@ window.CF_CONFIG = Object.freeze({
   WHATSAPP: '5541988868794',
   CONTACTS: Object.freeze([
     {id:'thiago',name:'Thiago',region:'Santa Catarina',phone:'5548991469474'},
-    {id:'douglas',name:'Douglas',region:'Santa Catarina',phone:'5548992057272'},
+    {id:'guilherme',name:'Guilherme',region:'Santa Catarina',phone:'5548991484875'},
     {id:'leandro',name:'Leandro',region:'Santa Catarina',phone:'5548991927703'},
     {id:'gustavo',name:'Gustavo',region:'Curitiba / PR',phone:'5541988868794'},
     {id:'curitiba',name:'Atendimento Curitiba',region:'Curitiba / PR',phone:'5541984690680'}
