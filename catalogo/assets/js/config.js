@@ -8,7 +8,7 @@ window.CF_CONFIG = Object.freeze({
   // Não altere um id já compartilhado. primary:true define o atendimento principal.
   CONTACTS: Object.freeze([
     {id:'thiago',name:'Thiago',region:'Santa Catarina',phone:'5548991469474'},
-    {id:'douglas',name:'Douglas',region:'Santa Catarina',phone:'5548992057272'},
+    {id:'guilherme',name:'Guilherme',region:'Santa Catarina',phone:'5548991484875'},
     {id:'leandro',name:'Leandro',region:'Santa Catarina',phone:'5548991927703'},
     {id:'gustavo',name:'Gustavo',region:'Curitiba / PR',phone:'5541988868794',primary:true},
     {id:'curitiba',name:'Atendimento Curitiba',region:'Curitiba / PR',phone:'5541984690680'}
@@ -17,4 +17,3 @@ window.CF_CONFIG = Object.freeze({
   PRODUCTS_PER_PAGE: 6,
   PLACEHOLDER: 'assets/img/placeholder.svg'
 });
-
