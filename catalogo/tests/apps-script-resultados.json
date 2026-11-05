@@ -1,0 +1,14 @@
+{
+  "liveSheetReadEveryRequest": true,
+  "legacyIndex": true,
+  "noDriveScanForStock": true,
+  "zeroStock": true,
+  "inactiveRemoved": true,
+  "manualImages": true,
+  "gzipAndUnicode": true,
+  "lock": true,
+  "failurePreservesIndex": true,
+  "schedules": true,
+  "otherTriggersPreserved": true,
+  "note": "Serviços Google simulados; tempos e cotas reais não medidos."
+}

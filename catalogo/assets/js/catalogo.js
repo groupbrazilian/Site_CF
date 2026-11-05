@@ -5,8 +5,18 @@
   const families = ['Ferramentas', 'Componentes', 'Máquinas', 'Serviços'];
   let products = [], demo = CF_CONFIG.USE_MOCK_DATA, lastFocus;
   let deepLinkHandled = false;
+  let detailState=null,loading=false,lastAttempt=0,lastSuccess=0,printing=false,deferredResult=null;
   let printBalanced = false;
   const qrCache = new Map();
+  const catalogHeader=$('.catalog-header'),headerFilters=$('#header-filters');
+  if(catalogHeader&&headerFilters){
+    const compact=matchMedia('(max-width:600px)');
+    const updateOffset=()=>document.documentElement.style.setProperty('--catalog-header-height',catalogHeader.getBoundingClientRect().height+'px');
+    const adaptFilters=()=>{headerFilters.open=!compact.matches;updateOffset();};
+    adaptFilters();compact.addEventListener('change',adaptFilters);
+    if(window.ResizeObserver)new ResizeObserver(updateOffset).observe(catalogHeader);
+    else {headerFilters.addEventListener('toggle',updateOffset);window.addEventListener('resize',updateOffset);}
+  }
   const sellerContext=CF_CONTACTS.resolve(),seller=sellerContext.selected;
   const messageFor=p=>p?`Olá, gostaria de informações sobre ${p.familia === 'Serviços' ? 'o serviço' : p.familia === 'Máquinas' ? 'a máquina' : p.familia === 'Componentes' ? 'o componente' : 'a ferramenta'} ${p.codigo} – ${p.nome}.`:'Olá, gostaria de solicitar uma análise ou orçamento.';
   const whatsapp=(p,c=seller||CF_CONTACTS.primary)=>c?CF_CONTACTS.whatsapp(c,messageFor(p)):'#contato';
@@ -44,21 +54,15 @@
   function categoryOpening(t,c,group,number) {
     const photos = group.filter(p=>p.imagem).slice(0,4);
     const tiles = photos.map(p=>`<figure>${picture(CF_API.imageURLs(p),p.nome)}<figcaption>${esc(p.codigo)}</figcaption></figure>`).join('');
-    return `<section id="${categoryId(t,c)}" class="sheet category-divider category-editorial"><div class="running">${context(t,c)}<span>${group.length} ITENS</span></div><div class="category-band"><span>CF INDUSTRIAL / ${esc(t)}</span></div><p class="eyebrow">PRECISÃO POR ESPECIALIDADE</p><h2>${esc(c)}<span class="orange">.</span></h2><div class="category-mosaic${photos.length <= 1 ? ' mosaic-single' : ''}">${tiles || `<figure>${picture(CF_CONFIG.PLACEHOLDER,c)}<figcaption>CF INDUSTRIAL</figcaption></figure>`}</div><div class="category-bottom"><span>${group.length} ${group.length === 1 ? 'item' : 'itens'} nesta coleção</span><span>ESPECIFICAÇÕES · APLICAÇÕES · SOLUÇÕES</span></div>${footer(c,number)}</section>`;
+    return `<section data-sync-key="${esc(JSON.stringify(['category',t,c]))}" id="${categoryId(t,c)}" class="sheet category-divider category-editorial"><div class="running">${context(t,c)}<span>${group.length} ITENS</span></div><div class="category-band"><span>CF INDUSTRIAL / ${esc(t)}</span></div><p class="eyebrow">PRECISÃO POR ESPECIALIDADE</p><h2>${esc(c)}<span class="orange">.</span></h2><div class="category-mosaic${photos.length <= 1 ? ' mosaic-single' : ''}">${tiles || `<figure>${picture(CF_CONFIG.PLACEHOLDER,c)}<figcaption>CF INDUSTRIAL</figcaption></figure>`}</div><div class="category-bottom"><span>${group.length} ${group.length === 1 ? 'item' : 'itens'} nesta coleção</span><span>ESPECIFICAÇÕES · APLICAÇÕES · SOLUÇÕES</span></div>${footer(c,number)}</section>`;
   }
   function allFamilies() {return [...families, ...new Set(products.map(p=>p.familia).filter(f=>!families.includes(f)))];}
-  function buildIndex() {
-    $('#index-content').innerHTML = allFamilies().map((t, i) => {
-      const items = active().filter(p => p.familia === t); const cats = [...new Set(items.map(p => p.categoria))];
-      return `<div class="index-entry"><a class="index-main" href="#tipo-${i}"><span class="index-number">0${i+1}</span><h3>${esc(t)}</h3><span>${items.length} itens ↗</span></a><div class="index-categories">${cats.map(c => `<a href="#${categoryId(t,c)}" data-index-type="${esc(t)}">${esc(c)} <span>→</span></a>`).join('') || '<p class="muted">Nenhum item disponível na base.</p>'}</div></div>`;
-    }).join('') + `<div class="index-entry"><a class="index-main" href="#contato"><span class="index-number">${String(allFamilies().length+1).padStart(2,'0')}</span><h3>Contato</h3><span>Atendimento técnico ↗</span></a></div>`;
-    $('#index-content').querySelectorAll('a').forEach(a => a.addEventListener('click', () => {resetFilters(); render();}));
-  }
-  function options() {
+  function options(preserve = false) {
     const current = $('#category').value; const type = $('#type').value;
     const cats = [...new Set(products.filter(p => !type || p.familia === type).map(p => p.categoria))].sort((a,b) => a.localeCompare(b,'pt-BR'));
-    $('#category').innerHTML = '<option value="">Todas as categorias</option>' + cats.map(c => `<option>${esc(c)}</option>`).join('');
-    if (cats.includes(current)) $('#category').value = current;
+    if(preserve&&current&&!cats.includes(current))cats.push(current);
+    const markup='<option value="">Todas as categorias</option>'+cats.map(c=>`<option>${esc(c)}</option>`).join('');
+    if($('#category').innerHTML!==markup){$('#category').innerHTML=markup;if(preserve||cats.includes(current))$('#category').value=current;}
   }
   function productHTML(p) {
     const multiple = p.quantidade_imagens >= 2;
@@ -66,7 +70,7 @@
     const count = Math.max(p.quantidade_imagens, p.imagens.length);
     const urls = [CF_API.imageURLs(p)];
     if (multiple) urls.push([p.imagens[1]?.thumbnail,p.imagens[1]?.url,p.imagens[1]?.url_original].filter(Boolean));
-    return `<article class="product ${multiple ? 'ferramenta-multipla' : 'ferramenta-simples'}${wide ? ' product-wide' : ''}" data-code="${esc(p.codigo)}"><div class="product-photos">${urls.map((url, i) => `<div class="product-image" data-detail="${p.id}" role="img" aria-label="${esc(p.nome)} — foto ${i+1}">${picture(url, `${p.nome} — foto ${i+1}`)}</div>`).join('')}${count > 2 ? `<span class="extra-photos">+ ${count - 2} ${count - 2 === 1 ? 'foto' : 'fotos'}</span>` : ''}</div><div class="product-copy"><div class="product-meta"><span class="code">${esc(p.codigo)}</span>${fold(p.status) !== 'ativo' ? `<span class="status">${esc(p.status)}</span>` : ''}</div><h3 class="product-name">${esc(p.nome)}</h3>${p.categoria_preenchida ? `<p class="category-label">${esc(p.categoria)}</p>` : ''}${p.aplicacao ? `<div class="technical"><h4>Aplicação</h4><p>${esc(p.aplicacao)}</p></div>` : ''}${p.descricao && !p.nome_por_descricao ? `<div class="technical description"><h4>Descrição técnica</h4><p>${esc(p.descricao)}</p></div>` : ''}${stockHTML(p)}<div class="product-actions"><button class="detail-link" data-detail="${p.id}">Ver detalhes +</button>${flyerLink(p)}<a class="quote" data-consult="${p.id}" href="${esc(whatsapp(p))}" target="_blank" rel="noopener">${esc(cta(p))} ↗</a></div><a class="print-qr" data-qr-url="${esc(digitalURL(p))}" href="${esc(digitalURL(p))}"><span class="qr-symbol"></span><span>Ver produto digital<br><small>Mais imagens e informações</small></span></a></div></article>`;
+    return `<article class="product ${multiple ? 'ferramenta-multipla' : 'ferramenta-simples'}${wide ? ' product-wide' : ''}" data-sync-key="${esc('product:'+fold(p.codigo))}" data-code="${esc(p.codigo)}"><div class="product-photos">${urls.map((url, i) => `<div class="product-image" data-detail="${p.id}" role="img" aria-label="${esc(p.nome)} — foto ${i+1}">${picture(url, `${p.nome} — foto ${i+1}`)}</div>`).join('')}${count > 2 ? `<span class="extra-photos">+ ${count - 2} ${count - 2 === 1 ? 'foto' : 'fotos'}</span>` : ''}</div><div class="product-copy"><div class="product-meta"><span class="code">${esc(p.codigo)}</span>${fold(p.status) !== 'ativo' ? `<span class="status">${esc(p.status)}</span>` : ''}${p.prioridade && fold(p.prioridade)!==fold(p.status)?`<span class="status">Prioridade: ${esc(p.prioridade)}</span>`:''}</div><h3 class="product-name">${esc(p.nome)}</h3>${p.categoria_preenchida ? `<p class="category-label">${esc(p.categoria)}</p>` : ''}${p.aplicacao ? `<div class="technical"><h4>Aplicação</h4><p>${esc(p.aplicacao)}</p></div>` : ''}${p.descricao && !p.nome_por_descricao ? `<div class="technical description"><h4>Descrição técnica</h4><p>${esc(p.descricao)}</p></div>` : ''}${stockHTML(p)}<div class="product-actions"><button class="detail-link" data-detail="${p.id}">Ver detalhes +</button>${flyerLink(p)}<a class="quote" data-consult="${p.id}" href="${esc(whatsapp(p))}" target="_blank" rel="noopener">${esc(cta(p))} ↗</a></div><a class="print-qr" data-qr-url="${esc(digitalURL(p))}" href="${esc(digitalURL(p))}"><span class="qr-symbol"></span><span>Ver produto digital<br><small>Mais imagens e informações</small></span></a></div></article>`;
   }
   function paginate(group) {
     const capacity = Math.max(2, Math.floor(Number(CF_CONFIG.PRODUCTS_PER_PAGE) / 2) * 2 || 6);
@@ -84,16 +88,17 @@
     if (current.length) pages.push(current);
     return pages;
   }
-  function render() {
+  function render({preserve=false} = {}) {
     printBalanced = false;
     const q = fold($('#search').value), type = $('#type').value, cat = $('#category').value, status = $('#status').value;
     const filtered = products.filter(p => (status ? p.status === status : fold(p.status) !== 'inativo') && (!type || p.familia === type) && (!cat || p.categoria === cat) && (!q || fold([p.codigo,p.nome,p.aplicacao,p.categoria,p.familia,p.status].join(' ')).includes(q)));
-    $('#result-count').textContent = `${filtered.length} ${filtered.length === 1 ? 'item' : 'itens'}${demo ? ' · demonstração' : ''}`;
-    let page = 3, html = '';
+    const countText=`${filtered.length} ${filtered.length === 1 ? 'item' : 'itens'}${demo ? ' · demonstração' : ''}`;
+    if($('#result-count').textContent!==countText)$('#result-count').textContent=countText;
+    let page = 2, html = '';
     allFamilies().forEach((t, ti) => {
       const items = filtered.filter(p => p.familia === t);
       if (!items.length && (q || type || cat || status)) return;
-      html += `<section id="tipo-${ti}" class="sheet divider"><div class="running">${context(t)}<span>CF INDUSTRIAL</span></div><p class="eyebrow">CATÁLOGO / ${String(ti+1).padStart(2,'0')}</p><h2>${esc(t)}<span class="orange">.</span></h2><p class="intro">${items.length ? `${items.length} itens para consulta técnica.` : 'Os itens desta seção aparecerão quando estiverem disponíveis na base.'}</p><div class="divider-visual">${picture(items.find(p => p.imagem)?.imagem || 'assets/img/usinagem.jpg', `Referência técnica — ${t}`)}</div>${footer(t,page++)}</section>`;
+      html += `<section data-sync-key="${esc(JSON.stringify(['family',t]))}" id="tipo-${ti}" class="sheet divider"><div class="running">${context(t)}<span>CF INDUSTRIAL</span></div><p class="eyebrow">CATÁLOGO / ${String(ti+1).padStart(2,'0')}</p><h2>${esc(t)}<span class="orange">.</span></h2><p class="intro">${items.length ? `${items.length} itens para consulta técnica.` : 'Os itens desta seção aparecerão quando estiverem disponíveis na base.'}</p><div class="divider-visual">${picture(items.find(p => p.imagem)?.imagem || 'assets/img/usinagem.jpg', `Referência técnica — ${t}`)}</div>${footer(t,page++)}</section>`;
       [...new Set(items.map(p => p.categoria))].forEach(c => {
         const group = items.filter(p => p.categoria === c);
         if (c !== 'Sem categoria') {
@@ -102,27 +107,29 @@
         const pages = paginate(group);
         for (let i = 0; i < pages.length; i++) {
           const id = c === 'Sem categoria' && i === 0 ? ` id="${categoryId(t,c)}"` : '';
-          html += `<section${id} class="sheet product-page" data-section="${esc(t)}" data-category="${esc(c)}">${running(t,c)}<div class="product-grid">${pages[i].map(productHTML).join('')}</div>${footer(c,page++)}</section>`;
+          html += `<section data-sync-key="${esc(JSON.stringify(['page',t,c,i]))}"${id} class="sheet product-page" data-section="${esc(t)}" data-category="${esc(c)}">${running(t,c)}<div class="product-grid">${pages[i].map(productHTML).join('')}</div>${footer(c,page++)}</section>`;
         }
       });
     });
-    $('#colecao').innerHTML = filtered.length || !(q || type || cat || status) ? html : '<div class="empty"><h3>Nenhum item encontrado.</h3><p>Tente outro termo ou limpe os filtros.</p></div>';
+    const markup=filtered.length || !(q || type || cat || status) ? html : '<div class="empty"><h3>Nenhum item encontrado.</h3><p>Tente outro termo ou limpe os filtros.</p></div>';
+    if(preserve)CF_SYNC_DOM.reconcile($('#colecao'),markup);else $('#colecao').innerHTML=markup;
     $('.last-page').textContent = String(page).padStart(2,'0');
     wireImages($('#colecao'));
-    $('#colecao').querySelectorAll('[data-detail]').forEach(b => b.addEventListener('click', () => openDetail(Number(b.dataset.detail))));
   }
-  function openDetail(id) {
+  function detailCopyHTML(p){return `<div class="detail-copy"><p class="eyebrow">${esc(p.familia)}${p.categoria_preenchida ? ' / ' + esc(p.categoria) : ''}</p><p class="code">${esc(p.codigo)}</p><h2 id="detail-title">${esc(p.nome)}</h2><p class="status">${esc(p.status)}</p><dl>${p.prioridade?`<dt>Prioridade</dt><dd>${esc(p.prioridade)}</dd>`:''}${p.aplicacao ? `<dt>Aplicação</dt><dd>${esc(p.aplicacao)}</dd>` : ''}${p.descricao && !p.nome_por_descricao ? `<dt>Descrição técnica</dt><dd>${esc(p.descricao)}</dd>` : ''}${stockHTML(p,true)}</dl><a class="button primary" data-consult="${p.id}" href="${esc(whatsapp(p))}" target="_blank" rel="noopener">${esc(cta(p))} pelo WhatsApp ↗</a><div class="detail-flyer-action">${flyerLink(p)}</div></div>`;}
+  function openDetail(id,{preserve=false,selectedURL} = {}) {
     const p = products.find(p => p.id === id); if (!p) return;
     const gallery = p.imagens.length ? p.imagens.map((img,i) => ({...img, urls:i===0?CF_API.imageURLs(p,true):[img.url,img.thumbnail,img.url_original].filter(Boolean), url: i === 0 ? p.imagem_grande || img.url : img.url})) : [{url:p.imagem_grande || p.imagem,urls:CF_API.imageURLs(p,true), thumbnail:p.imagem, nome:p.nome}].filter(img=>img.url);
     if (!gallery.length) gallery.push({url:CF_CONFIG.PLACEHOLDER,nome:p.nome});
-    lastFocus = document.activeElement;
-    $('#detail-content').innerHTML = `<div class="detail-gallery"><button id="zoom" aria-label="Ampliar imagem">${picture(gallery[0].url,p.nome,'detail-main')}</button><div class="gallery-controls"><button id="prev" aria-label="Imagem anterior">←</button><span id="gallery-count"></span><button id="next" aria-label="Próxima imagem">→</button></div><div class="thumbnails">${gallery.map((img,i) => `<button data-photo="${i}" aria-label="Imagem ${i+1}" aria-pressed="${i===0}">${picture([img.thumbnail,img.url,img.url_original].filter(Boolean),img.nome || p.nome)}</button>`).join('')}</div><p class="muted">Clique na imagem para ampliar.</p></div><div class="detail-copy"><p class="eyebrow">${esc(p.familia)}${p.categoria_preenchida ? ' / ' + esc(p.categoria) : ''}</p><p class="code">${esc(p.codigo)}</p><h2 id="detail-title">${esc(p.nome)}</h2><p class="status">${esc(p.status)}</p><dl>${p.aplicacao ? `<dt>Aplicação</dt><dd>${esc(p.aplicacao)}</dd>` : ''}${p.descricao && !p.nome_por_descricao ? `<dt>Descrição técnica</dt><dd>${esc(p.descricao)}</dd>` : ''}${stockHTML(p,true)}</dl><a class="button primary" data-consult="${p.id}" href="${esc(whatsapp(p))}" target="_blank" rel="noopener">${esc(cta(p))} pelo WhatsApp ↗</a><div class="detail-flyer-action">${flyerLink(p)}</div></div>`;
+    if(!preserve)lastFocus = document.activeElement;
+    $('#detail-content').innerHTML = `<div class="detail-gallery"><button id="zoom" aria-label="Ampliar imagem">${picture(gallery[0].url,p.nome,'detail-main')}</button><div class="gallery-controls"><button id="prev" aria-label="Imagem anterior">←</button><span id="gallery-count"></span><button id="next" aria-label="Próxima imagem">→</button></div><div class="thumbnails">${gallery.map((img,i) => `<button data-photo="${i}" aria-label="Imagem ${i+1}" aria-pressed="${i===0}">${picture([img.thumbnail,img.url,img.url_original].filter(Boolean),img.nome || p.nome)}</button>`).join('')}</div><p class="muted">Clique na imagem para ampliar.</p></div>${detailCopyHTML(p)}`;
     let index = 0;
-    const select = i => {index = (i + gallery.length) % gallery.length; const img=$('.detail-main'),urls=gallery[index].urls||[gallery[index].url];img.dataset.imageUrls=JSON.stringify(urls);img.dataset.imageIndex='0';img.src=urls[0];wireImages($('#zoom'));$('#gallery-count').textContent = `${index+1} / ${gallery.length}`; document.querySelectorAll('[data-photo]').forEach(b => b.setAttribute('aria-pressed',Number(b.dataset.photo) === index));};
+    detailState={code:p.codigo,signature:imageSignature(p),gallery,index:0};
+    const select = i => {index = (i + gallery.length) % gallery.length;detailState.index=index; const img=$('.detail-main'),urls=gallery[index].urls||[gallery[index].url];img.dataset.imageUrls=JSON.stringify(urls);img.dataset.imageIndex='0';img.src=urls[0];wireImages($('#zoom'));$('#gallery-count').textContent = `${index+1} / ${gallery.length}`; document.querySelectorAll('[data-photo]').forEach(b => b.setAttribute('aria-pressed',Number(b.dataset.photo) === index));};
     $('#prev').onclick = () => select(index-1); $('#next').onclick = () => select(index+1);
     document.querySelectorAll('[data-photo]').forEach(b => b.onclick = () => select(Number(b.dataset.photo)));
     $('#zoom').onclick = () => {$('#detail').classList.toggle('zoomed');};
-    wireImages($('#detail-content')); select(0); if (!$('#detail').open) $('#detail').showModal(); document.body.classList.add('modal-open');
+    wireImages($('#detail-content')); select(Math.max(0,gallery.findIndex(photo=>photo.url===selectedURL||photo.urls?.includes(selectedURL)))); if (!$('#detail').open) $('#detail').showModal(); document.body.classList.add('modal-open');
     const url = new URL(location.href); url.searchParams.set('produto',p.codigo); history.replaceState(null,'',url);
   }
   function openDeepLink() {
@@ -133,22 +140,48 @@
     else { const note = document.createElement('p'); note.className='deep-link-note'; note.textContent=`O produto ${code} não foi encontrado na base atual. Pesquise no catálogo ou fale com nossa equipe.`; $('#data-message').append(note); }
   }
   function resetFilters() {$('#search').value = ''; $('#type').value = ''; $('#category').value = ''; $('#status').value = ''; options();}
-  async function load(force = false) {
-    $('#reload').disabled = true; $('#data-message').textContent = 'Consultando a base do catálogo…';
-    try {
-      const result = await CF_API.getProducts(force,demo); products = result.products; document.querySelector('.demo-mark')?.remove(); if (demo) { const mark = document.createElement('p'); mark.className='demo-mark'; mark.textContent='DEMONSTRAÇÃO LOCAL · Dados incompletos do briefing. Estoques e imagens reais não disponíveis.'; document.querySelector('.cover').prepend(mark); }
-      $('#type').innerHTML = '<option value="">Todas as famílias</option>' + allFamilies().map(f=>'<option>'+esc(f)+'</option>').join(''); options(); $('#status').innerHTML = '<option value="">Todos os disponíveis</option>' + [...new Set(products.map(p => p.status))].sort().map(s => `<option>${esc(s)}</option>`).join('');
-      buildIndex(); render();
-      $('#data-message').className = 'data-message' + (demo ? ' demo' : '');
-      $('#data-message').innerHTML = demo ? 'DEMONSTRAÇÃO LOCAL · Nomes e códigos fornecidos no briefing. Estoques, aplicações e fotos reais não foram recebidos. <button id="real" class="text-button">Voltar à API real</button>' : `Base consultada em ${result.fetchedAt.toLocaleString('pt-BR')}. Disponibilidade sujeita a confirmação.`;
-      if (demo) $('#real').onclick = () => {demo=false; load(true);};
-      if (!deepLinkHandled) { deepLinkHandled = true; openDeepLink(); }
-    } catch (e) {
-      products=[]; options(); buildIndex(); render(); $('#data-message').className='data-message error';
-      $('#data-message').innerHTML = `<strong>Não foi possível carregar os produtos.</strong><p>${esc(e.message)}</p><button id="retry" class="button">Recarregar</button>`;
-      $('#retry').onclick = () => load(true);
-    } finally {$('#reload').disabled=false;}
+  function imageSignature(p){return JSON.stringify([p.imagem,p.imagem_grande,p.imagens,p.quantidade_imagens]);}
+  function selectOptions(selector,values,label){
+    const select=$(selector),value=select.value;if(value&&!values.includes(value))values.push(value);
+    const markup='<option value="">'+label+'</option>'+values.map(v=>`<option>${esc(v)}</option>`).join('');
+    if(select.innerHTML!==markup){select.innerHTML=markup;select.value=value;}
   }
+  function refreshDetail(){
+    if(!$('#detail').open||!detailState)return;
+    const p=products.find(p=>fold(p.codigo)===fold(detailState.code));
+    if(!p){$('.detail-copy').innerHTML=`<p class="eyebrow">${esc(detailState.code)}</p><h2>Item indisponível na base atual</h2><p>Este item foi removido ou desativado. Escolha outro produto no catálogo.</p>`;return;}
+    if(imageSignature(p)!==detailState.signature){const selectedURL=detailState.gallery[detailState.index]?.url;openDetail(p.id,{preserve:true,selectedURL});return;}
+    $('.detail-main').alt=p.nome;
+    const template=document.createElement('template');template.innerHTML=detailCopyHTML(p);
+    CF_SYNC_DOM.reconcile($('.detail-copy'),template.content.firstElementChild.innerHTML);
+  }
+  function applyResult(result,{silent=false}={}){
+    const state=CF_SYNC_DOM.capture(),changed=JSON.stringify(products)!==JSON.stringify(result.products),initial=!deepLinkHandled;
+    products=result.products;lastSuccess=Date.now();
+    if(changed||initial){
+      selectOptions('#type',allFamilies(),'Todas as famílias');options(true);
+      selectOptions('#status',[...new Set(products.map(p=>p.status))].sort(),'Todos os disponíveis');
+      render({preserve:!initial});refreshDetail();
+    }
+    $('#data-message').setAttribute('aria-live',silent?'off':'polite');
+    $('#data-message').className='data-message'+(demo?' demo':'');
+    $('#data-message').textContent=demo?'DEMONSTRAÇÃO LOCAL · Dados de desenvolvimento.':`Base consultada em ${result.fetchedAt.toLocaleString('pt-BR')}. Atualização automática a cada 5 minutos. Disponibilidade sujeita a confirmação.`;
+    if(!initial)CF_SYNC_DOM.restore(state);
+    if(initial){deepLinkHandled=true;openDeepLink();}
+  }
+  async function load(force=false,{silent=false}={}){
+    if(loading)return;loading=true;lastAttempt=Date.now();
+    if(!silent){$('#reload').disabled=true;$('#data-message').setAttribute('aria-live','polite');$('#data-message').textContent='Consultando a base do catálogo…';}
+    try{
+      const result=await CF_API.getProducts(force,demo);
+      if(printing||matchMedia('print').matches)deferredResult=result;else applyResult(result,{silent});
+    }catch(e){
+      // Keep the last successful data visible on a transient error, including a valid empty catalog.
+      if(lastSuccess){if(!silent){$('#data-message').className='data-message error';$('#data-message').textContent='Não foi possível atualizar agora. Mantidos os dados da última consulta. '+e.message;}}
+      else if(!silent){$('#data-message').className='data-message error';$('#data-message').innerHTML=`<strong>Não foi possível carregar os produtos.</strong><p>${esc(e.message)}</p><button id="retry" class="button">Recarregar</button>`;$('#retry').onclick=()=>load(true);}
+    }finally{loading=false;if(!silent)$('#reload').disabled=false;}
+  }
+  $('#colecao').addEventListener('click',e=>{const target=e.target.closest('[data-detail]');if(target)openDetail(Number(target.dataset.detail));});
   let delay;
   $('#search').addEventListener('input', () => {clearTimeout(delay); delay=setTimeout(render,160);});
   ['type','category','status'].forEach(id => $('#'+id).addEventListener('change', () => {if(id==='type') options(); render();}));
@@ -214,8 +247,8 @@
     if ($('#detail').open) $('#detail').close();
     await preparePrint(); window.print();
   }
-  window.addEventListener('beforeprint',() => {prepareQRs(); balancePrintPages();});
-  window.addEventListener('afterprint',render);
+  window.addEventListener('beforeprint',() => {printing=true;prepareQRs(); balancePrintPages();});
+  window.addEventListener('afterprint',()=>{printing=false;if(deferredResult){const result=deferredResult;deferredResult=null;applyResult(result,{silent:true});}else render({preserve:true});});
   window.CF_CATALOG = {preparePrint};
   document.querySelectorAll('.print-button').forEach(b=>b.addEventListener('click',print));
   const contactList=document.createElement('div');contactList.className='regional-contacts';
@@ -226,8 +259,13 @@
   const mainContact=$('#contato .contact-grid .small-label')?.closest('.contact-grid')?.querySelector('a[href^="https://wa.me/"]');
   if(mainContact){const paragraph=mainContact.closest('p');paragraph.innerHTML=attendance?`<span class="small-label">WHATSAPP · ${esc(attendance.name.toUpperCase())}</span><a href="${esc(CF_CONTACTS.whatsapp(attendance))}" target="_blank" rel="noopener">${esc(CF_CONTACTS.format(attendance))} ↗</a>`:'';}
   const generalCTA=$('#contato > .button');generalCTA.href=whatsapp();generalCTA.dataset.consult='general';generalCTA.textContent=seller?'Falar com '+seller.name+' ↗':'Escolher vendedor ↗';
-  if(sellerContext.requested){const banner=document.createElement('aside');banner.className='seller-context';const general=new URL(location.href);general.searchParams.delete('vendedor');banner.innerHTML=seller?`<strong>Atendimento: ${esc(seller.name)} · ${esc(seller.region)}</strong><span>Consultas e panfletos usarão este contato.</span><a href="${esc(general.href)}">Catálogo geral</a>`:`<strong>Este vendedor não está mais disponível.</strong><span>Escolha outro atendimento ao consultar ou gerar um panfleto.</span><a href="${esc(general.href)}">Catálogo geral</a>`;document.querySelector('.navigation').after(banner);}
-  window.addEventListener('pageshow',event=>{if(event.persisted)load(true);});
+  if(sellerContext.requested){const banner=document.createElement('aside');banner.className='seller-context';const general=new URL(location.href);general.searchParams.delete('vendedor');banner.innerHTML=seller?`<strong>Atendimento: ${esc(seller.name)} · ${esc(seller.region)}</strong><span>Consultas e panfletos usarão este contato.</span><a href="${esc(general.href)}">Catálogo geral</a>`:`<strong>Este vendedor não está mais disponível.</strong><span>Escolha outro atendimento ao consultar ou gerar um panfleto.</span><a href="${esc(general.href)}">Catálogo geral</a>`;(document.querySelector('.catalog-header')||document.querySelector('.navigation')).after(banner);}
+  const refreshEvery=Number(CF_CONFIG.AUTO_REFRESH_MS)>0?Number(CF_CONFIG.AUTO_REFRESH_MS):300000;
+  const refreshIfVisible=()=>{if(!document.hidden&&!printing&&!matchMedia('print').matches&&!demo)load(true,{silent:true});};
+  setInterval(refreshIfVisible,refreshEvery);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&Date.now()-lastAttempt>=refreshEvery)refreshIfVisible();});
+  window.addEventListener('online',refreshIfVisible);
+  window.addEventListener('pageshow',event=>{if(event.persisted)refreshIfVisible();});
   load();
 })();
 

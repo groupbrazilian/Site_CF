@@ -1,5 +1,21 @@
 # Catálogo digital CF Industrial
 
+## Capa direta para a coleção — 05/11/2026
+
+Removida a página de índice e seus links. A capa aponta para `#colecao`; as aberturas de Ferramentas, Componentes, Máquinas e Serviços foram preservadas. A primeira abertura de família agora é a página 2. Os filtros de busca, família, categoria, status, Limpar e estoque na impressão estão no cabeçalho fixo. No celular ficam sob a opção recolhível “Buscar e filtrar catálogo”. O deslocamento das âncoras acompanha a altura real desse cabeçalho. Cabeçalho/filtros e o aviso de vendedor não geram páginas na impressão.
+
+Mantidos os vendedores, panfleto, dados reais e atualização silenciosa de 5 minutos. Verificação: `tests/sem-indice-resultados.json` e regressão `tests/atualizacao-resultados.json`.
+
+Publicar apenas `index.html`, `assets/js/catalogo.js` e `assets/css/catalogo.css` desta revisão, dentro de `catalogo/`. Se ainda não publicou a revisão da atualização automática, envie também os arquivos listados em `apps-script/COMO-ATUALIZAR.md`.
+
+## Atualização silenciosa — 05/11/2026
+
+O catálogo consulta a API automaticamente a cada 5 minutos com a aba visível e também ao abrir/recarregar. A atualização mantém filtros, posição, produto aberto, foto selecionada e zoom. Só muda referências de fotos quando elas mudarem no JSON; estoque/prioridade são atualizados sem substituir as imagens. Falhas transitórias preservam os dados da última consulta. A impressão aguarda a aplicação de novas respostas até ser encerrada.
+
+Configuração: `AUTO_REFRESH_MS` em `assets/js/config.js`. Reconciliação do conteúdo: `assets/js/sync-dom.js`, carregado antes de `catalogo.js`. IDs internos agora se mantêm estáveis por código mesmo que a API mude a ordem das linhas.
+
+Foi preparado o código completo do projeto **API Catálogo CF Industrial** em `apps-script/API-Catalogo-CF-Industrial.gs`, com leitura de ESTOQUE em tempo real, varredura padrão de imagens a cada 2 horas, atualização manual `atualizarImagensAgora`, métricas de duração e opção explícita de 10 minutos. O projeto de movimentação de estoque não foi alterado. Instruções de publicação e instalação: `apps-script/COMO-ATUALIZAR.md`. Nenhuma alteração remota foi feita no Apps Script ou GitHub.
+
 ## Catálogo geral e links por vendedor — 28/10/2026
 
 No catálogo geral, Consultar ferramenta/componente e os CTAs de Máquina/Serviço abrem uma escolha de vendedor, nos cards e nos detalhes. O CTA geral de atendimento também permite escolher. Panfleto mantém a seleção. No catálogo acessado com `?vendedor=ID`, consultas vão diretamente ao WhatsApp desse vendedor e os panfletos abrem com seu contato preenchido. O identificador também acompanha links de produto e QR Codes. Retornar do panfleto mantém o vendedor. O catálogo geral não memoriza o vendedor no navegador.

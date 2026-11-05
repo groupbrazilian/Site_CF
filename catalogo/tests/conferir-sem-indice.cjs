@@ -1,0 +1,19 @@
+const {chromium}=require('C:/Users/admin/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const fs=require('fs'),assert=require('assert');
+(async()=>{
+ const browser=await chromium.launch({headless:true,channel:'chrome'}),page=await browser.newPage({viewport:{width:1280,height:900},reducedMotion:'reduce'}),errors=[];page.on('pageerror',e=>errors.push(e.message));
+ const data=['Ferramenta','Componente','Máquina','Serviço'].map((familia,i)=>({codigo:['TK1717','TK200A','MCVT','SERV01'][i],nome:'Item '+familia,familia,categoria:'Categoria '+familia,descricao:'Descrição técnica',aplicacao:'Aplicação',estoque_pr:i,estoque_sc:null,prioridade:'Alto',imagem:'https://img.cf.test/item.png',imagem_grande:'https://img.cf.test/item.png',imagens:[],quantidade_imagens:1}));
+ await page.route('https://script.google.com/**',r=>r.fulfill({contentType:'application/json',headers:{'Access-Control-Allow-Origin':'*'},body:JSON.stringify({sucesso:true,produtos:data})}));
+ await page.route('https://img.cf.test/**',r=>r.fulfill({contentType:'image/png',body:fs.readFileSync('catalogo/assets/img/panfleto/cf-logo.png')}));
+ await page.goto('http://127.0.0.1:4173/catalogo/?vendedor=thiago');await page.waitForFunction(()=>document.querySelectorAll('.product').length===4);
+ assert.equal(await page.locator('#indice,#index-content,.index-page,a[href="#indice"]').count(),0);
+ assert.equal(await page.locator('.catalog-header #search').count(),1);assert.equal(await page.locator('.catalog-header .tools').count(),1);assert.equal(await page.locator('.divider').count(),4);
+ assert.equal(await page.locator('#colecao .divider').first().locator('.folio span').last().textContent(),'02');
+ await page.locator('.cover-art-actions a').click();await page.waitForTimeout(150);
+ const desktop=await page.evaluate(()=>({header:document.querySelector('.catalog-header').getBoundingClientRect(),start:document.querySelector('#colecao').getBoundingClientRect().top}));assert(desktop.header.top===0);assert(desktop.start>=desktop.header.bottom-2);
+ await page.fill('#search','TK200A');await page.waitForFunction(()=>document.querySelectorAll('.product').length===1);await page.selectOption('#type','Componentes');assert.equal(await page.locator('.product').getAttribute('data-code'),'TK200A');await page.locator('#clear').click();await page.waitForFunction(()=>document.querySelectorAll('.product').length===4);
+ await page.screenshot({path:'catalogo/tests/cabecalho-sem-indice-desktop.png'});
+ await page.emulateMedia({media:'print'});assert.equal(await page.locator('.catalog-header').evaluate(e=>getComputedStyle(e).display),'none');assert.equal(await page.locator('#indice').count(),0);assert.equal(await page.locator('.divider').count(),4);await page.emulateMedia({media:'screen'});
+ await page.setViewportSize({width:390,height:844});await page.evaluate(()=>scrollTo(0,0));assert(!(await page.locator('#header-filters').getAttribute('open')));assert(!(await page.locator('#search').isVisible()));await page.locator('#header-filters summary').click();assert(await page.locator('#search').isVisible());assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await page.fill('#search','SERV01');await page.waitForFunction(()=>document.querySelectorAll('.product').length===1);assert.equal(await page.locator('.product').getAttribute('data-code'),'SERV01');await page.screenshot({path:'catalogo/tests/cabecalho-sem-indice-mobile.png'});
+ assert.deepEqual(errors,[]);fs.writeFileSync('catalogo/tests/sem-indice-resultados.json',JSON.stringify({indexRemoved:true,coverToFamily:true,fourFamilies:true,firstSectionPage:2,headerFilters:true,desktop:true,mobile:true,print:true,errors},null,2));console.log('Sem índice; quatro famílias; filtros no cabeçalho; desktop, celular e impressão: OK');await browser.close();
+})().catch(e=>{console.error(e);process.exit(1)});

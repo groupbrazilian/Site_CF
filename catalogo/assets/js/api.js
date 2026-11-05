@@ -4,6 +4,8 @@
   const safeURL = value => { if (!clean(value)) return ""; try { const u = new URL(clean(value), location.href); return ['http:', 'https:'].includes(u.protocol) ? u.href : ''; } catch { return ''; } };
   const family = value => ({ferramenta:'Ferramentas', ferramentas:'Ferramentas', componente:'Componentes', componentes:'Componentes', maquina:'Máquinas', maquinas:'Máquinas', servico:'Serviços', servicos:'Serviços'})[fold(value)] || clean(value) || 'Outros';
   const collator = new Intl.Collator('pt-BR', {numeric:true, sensitivity:'base'});
+  const productIds=new Map();let nextProductId=0;
+  function stableId(record,index){const key=fold(record.codigo??record['Código'])||'sem-codigo:'+fold(record.nome||record.descricao)+':'+index;if(!productIds.has(key))productIds.set(key,nextProductId++);return productIds.get(key);}
   function field(record, names) {
     for (const name of names) {
       const key = Object.keys(record).find(k => fold(k).replace(/\s+/g,' ') === fold(name).replace(/\s+/g,' '));
@@ -29,7 +31,7 @@
       const declaredCount = Number(p.quantidade_imagens);
       const quantidade_imagens = p.quantidade_imagens != null && clean(p.quantidade_imagens) !== '' && Number.isFinite(declaredCount) && declaredCount >= 0 ? Math.floor(declaredCount) : imagens.length;
       return {
-      id: i, codigo: clean(p.codigo ?? p['Código']), nome: nome || descricao || clean(p.codigo ?? p['Código']),
+      id: stableId(p,i), codigo: clean(p.codigo ?? p['Código']), nome: nome || descricao || clean(p.codigo ?? p['Código']),
       nome_por_descricao: !nome && Boolean(descricao),
       familia: productFamily(p), tipo: productFamily(p), prioridade: field(p,['prioridade']), categoria: clean(p.categoria ?? p['Categoria']) || 'Sem categoria',
       categoria_preenchida: Boolean(clean(p.categoria ?? p['Categoria'])),
@@ -66,7 +68,7 @@
         const body = await response.text();
         if (/^\s*</.test(body)) throw new Error('A API retornou uma página de login ou HTML em vez dos dados públicos.');
         let raw; try {raw = JSON.parse(body);} catch {throw new Error('A resposta da API não é um JSON válido.');}
-        if (raw.success === false || raw.sucesso === false || raw.error) throw new Error('A API informou um erro ao consultar a base.');
+        if (raw.success === false || raw.sucesso === false || raw.error || raw.erro) throw new Error('A API informou um erro ao consultar a base.');
         return {products: normalize(raw), demo, fetchedAt: new Date()};
       } catch (e) {
         if (e.name === 'AbortError') throw new Error('A consulta demorou mais que o esperado. Tente novamente.');

@@ -3,6 +3,7 @@ window.CF_CONFIG = Object.freeze({
   USE_MOCK_DATA: false,
   MOCK_URL: 'data/catalogo-mock.json',
   REQUEST_TIMEOUT_MS: 60000,
+  AUTO_REFRESH_MS: 5 * 60 * 1000,
   WHATSAPP: '5541988868794',
   // Adicione/remova vendedores somente nesta lista. active:false desativa sem apagar.
   // Não altere um id já compartilhado. primary:true define o atendimento principal.
@@ -17,3 +18,4 @@ window.CF_CONFIG = Object.freeze({
   PRODUCTS_PER_PAGE: 6,
   PLACEHOLDER: 'assets/img/placeholder.svg'
 });
+
