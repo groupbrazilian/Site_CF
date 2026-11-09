@@ -66,12 +66,18 @@
   };
   let language=({en:'en',es:'es',pt:'pt-BR','pt-br':'pt-BR'})[(new URLSearchParams(location.search).get('lang')||'pt-BR').toLowerCase()]||'pt-BR';
   const textSources=new WeakMap(),attributeSources=new WeakMap();let observer;
-  function t(value){const raw=String(value??'');if(language==='pt-BR'){if(raw==='distributorLine1')return 'DISTRIBUIDOR';if(raw==='distributorLine2')return 'OFICIAL';return raw;}return dictionary[raw]?.[language==='en'?0:1]??raw;}
+  // Vincula cada tradução ao texto de origem, nunca apenas ao código do item.
+  // Assim, uma alteração na planilha não recebe especificações antigas.
+  const key=value=>String(value??'').normalize('NFC').replace(/\s+/g,' ').trim().toLocaleLowerCase('pt-BR');
+  const productTranslations=new Map(Object.entries(window.CF_PRODUCT_TRANSLATIONS||{}).map(([source,pair])=>[key(source),pair]));
+  function t(value){const raw=String(value??'');if(language==='pt-BR'){if(raw==='distributorLine1')return 'DISTRIBUIDOR';if(raw==='distributorLine2')return 'OFICIAL';return raw;}return (dictionary[raw]||productTranslations.get(key(raw)))?.[language==='en'?0:1]??raw;}
   function translate(value){
     const raw=value.trim();let result=t(raw);
     if(result===raw&&language!=='pt-BR'){
       const en=language==='en';
       const patterns=[
+        [/^(.+) ↗$/,m=>t(m[1])+' ↗'],
+        [/^([A-Za-z0-9_-]+) · (.+)$/,m=>m[1]+' · '+t(m[2])],
         [/^Base consultada em (.+)\. Atualização automática a cada 5 minutos\. Disponibilidade sujeita a confirmação\.$/,m=>en?`Last checked: ${m[1]}. Automatically refreshed every 5 minutes. Availability subject to confirmation.`:`Última consulta: ${m[1]}. Actualización automática cada 5 minutos. Disponibilidad sujeta a confirmación.`],
         [/^(\d+) (item|itens)( · demonstração)?$/,m=>`${m[1]} ${en?(m[1]==='1'?'item':'items'):(m[1]==='1'?'artículo':'artículos')}${m[3]?' · demo':''}`],
         [/^(\d+) ITENS$/,m=>`${m[1]} ${en?(m[1]==='1'?'ITEM':'ITEMS'):(m[1]==='1'?'ARTÍCULO':'ARTÍCULOS')}`],
@@ -94,15 +100,14 @@
     return value.slice(0,value.indexOf(raw))+result+value.slice(value.indexOf(raw)+raw.length);
   }
   function withLanguage(value){const url=new URL(value,location.href);if(language==='pt-BR')url.searchParams.delete('lang');else url.searchParams.set('lang',language);return url;}
-  function shouldSkip(node){const p=node.parentElement;if(!p||p.closest('script,style,textarea,.product-name,.technical p,#detail-title'))return true;
-    if(p.tagName==='DD'){const dt=p.previousElementSibling,source=dt&&[...dt.childNodes].map(n=>textSources.get(n)?.source||n.textContent).join('').trim();if(source==='Aplicação'||source==='Descrição técnica')return true;}return false;}
+  function shouldSkip(node){const p=node.parentElement;return !p||Boolean(p.closest('script,style,textarea'));}
   function walk(root){
     if(root.nodeType===3){if(shouldSkip(root)||!root.nodeValue.trim())return;const previous=textSources.get(root),source=previous&&previous.last===root.nodeValue?previous.source:root.nodeValue,next=translate(source);textSources.set(root,{source,last:next});if(root.nodeValue!==next)root.nodeValue=next;return;}
     if(root.nodeType!==1&&root.nodeType!==9&&root.nodeType!==11)return;
     if(root.nodeType===1){
       if(root.matches('script,style,textarea'))return;
       if(root.tagName==='OPTION'&&!root.hasAttribute('value'))root.setAttribute('value',root.value);
-      for(const attr of ['aria-label','placeholder','title']){if(!root.hasAttribute(attr))continue;let source=attributeSources.get(root);if(!source){source={};attributeSources.set(root,source);}if(!source[attr])source[attr]=root.getAttribute(attr);const next=translate(source[attr]);if(root.getAttribute(attr)!==next)root.setAttribute(attr,next);}
+      for(const attr of ['aria-label','placeholder','title','alt']){if(!root.hasAttribute(attr))continue;let source=attributeSources.get(root);if(!source){source={};attributeSources.set(root,source);}const current=root.getAttribute(attr),previous=source[attr];const original=previous&&previous.last===current?previous.source:current;const next=translate(original);source[attr]={source:original,last:next};if(current!==next)root.setAttribute(attr,next);}
     }
     for(const child of [...root.childNodes])walk(child);
   }
@@ -114,7 +119,7 @@
   function setLanguage(next){if(!['pt-BR','en','es'].includes(next))return;language=next;const url=new URL(location.href);url.searchParams.set('lang',next);history.replaceState(null,'',url);document.dispatchEvent(new CustomEvent('cf:languagechange'));apply();}
   function whatsappMessage(p){if(language==='pt-BR')return p?`Olá, gostaria de informações sobre ${p.familia==='Serviços'?'o serviço':p.familia==='Máquinas'?'a máquina':p.familia==='Componentes'?'o componente':'a ferramenta'} ${p.codigo} – ${p.nome}.`:'Olá, gostaria de solicitar uma análise ou orçamento.';
     if(!p)return language==='en'?'Hello, I would like to request an assessment or quote.':'Hola, quisiera solicitar un análisis o presupuesto.';
-    return language==='en'?`Hello, I would like information about ${p.codigo} – ${p.nome}.`:`Hola, quisiera información sobre ${p.codigo} – ${p.nome}.`;
+    return language==='en'?`Hello, I would like information about ${p.codigo} – ${t(p.nome)}.`:`Hola, quisiera información sobre ${p.codigo} – ${t(p.nome)}.`;
   }
   window.CF_I18N={t,apply,setLanguage,withLanguage,whatsappMessage,get language(){return language;},get locale(){return language==='en'?'en-US':language==='es'?'es-ES':'pt-BR';}};
   const host=document.querySelector('.navigation')||document.querySelector('.toolbar');

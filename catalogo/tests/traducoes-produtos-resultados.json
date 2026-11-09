@@ -1,0 +1,26 @@
+{
+  "products": 71,
+  "languages": [
+    "pt-BR",
+    "en",
+    "es"
+  ],
+  "fields": [
+    "nome",
+    "descricao",
+    "aplicacao"
+  ],
+  "cards": true,
+  "details": true,
+  "flyers": [
+    "TK200A",
+    "TK1717",
+    "MCVT",
+    "SERV01"
+  ],
+  "print": true,
+  "translatedSearch": true,
+  "sourceChangePreserved": true,
+  "apiCalls": 6,
+  "errors": []
+}

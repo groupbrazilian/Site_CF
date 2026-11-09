@@ -445,7 +445,7 @@
     const [brand,photoResult,...icons]=await Promise.all([logos(),photo(p),...Object.keys(symbols).map(icon)]);
     await loadTitleFont();
     const [cf,brazilian]=brand,titleFamily='"CF Bebas Neue", sans-serif';
-    const title=clean(p.nome).toLocaleUpperCase('pt-BR');
+    const title=clean(CF_I18N.t(p.nome)).toLocaleUpperCase(CF_I18N.locale);
     let titleSize=layout.titleSize,titleLines=lines(title,1008,titleSize,400,titleFamily);
     while(titleLines.length*titleSize*1.12>layout.titleMaxHeight&&titleSize>34){titleSize-=2;titleLines=lines(title,1008,titleSize,400,titleFamily);}
     if(titleLines.length*titleSize*1.12>layout.titleMaxHeight)throw new Error('O nome deste item é muito extenso para o panfleto A5. Revise o nome na base antes de gerar a arte.');
@@ -454,9 +454,9 @@
     const heroY=Math.max(306,layout.titleY+titleLines.length*titleSize*1.12+28),bodyBottom=contactY-20,heroHeight=bodyBottom-heroY;
     const photoX=layout.margin,photoWidth=layout.imageWidth,panelX=photoX+photoWidth+layout.gap,panelWidth=1080-layout.margin-panelX;
     const blocks=[];
-    if(clean(p.aplicacao))blocks.push({label:CF_I18N.t('APLICAÇÃO'),value:p.aplicacao,icon:'gear'});
-    if(clean(p.descricao)&&!p.nome_por_descricao)blocks.push({label:CF_I18N.t('DESCRIÇÃO TÉCNICA'),value:p.descricao,icon:'document'});
-    if(!blocks.length&&p.categoria_preenchida)blocks.push({label:CF_I18N.t('CATEGORIA'),value:p.categoria,icon:'gear'});
+    if(clean(p.aplicacao))blocks.push({label:CF_I18N.t('APLICAÇÃO'),value:CF_I18N.t(p.aplicacao),icon:'gear'});
+    if(clean(p.descricao)&&!p.nome_por_descricao)blocks.push({label:CF_I18N.t('DESCRIÇÃO TÉCNICA'),value:CF_I18N.t(p.descricao),icon:'document'});
+    if(!blocks.length&&p.categoria_preenchida)blocks.push({label:CF_I18N.t('CATEGORIA'),value:CF_I18N.t(p.categoria),icon:'gear'});
     const panelGap=16,panelTextWidth=panelWidth-64,availableHeight=heroHeight-Math.max(0,blocks.length-1)*panelGap;
     let detailSize=layout.detailSize,needed=0;
     do{needed=0;for(const b of blocks){b.lines=lines(b.value,panelTextWidth,detailSize);b.minHeight=116+b.lines.length*detailSize*1.28+28;needed+=b.minHeight;}if(needed<=availableHeight||detailSize===22)break;detailSize--;}while(true);

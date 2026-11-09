@@ -91,7 +91,7 @@
   function render({preserve=false} = {}) {
     printBalanced = false;
     const q = fold($('#search').value), type = $('#type').value, cat = $('#category').value, status = $('#status').value;
-    const filtered = products.filter(p => (status ? p.status === status : fold(p.status) !== 'inativo') && (!type || p.familia === type) && (!cat || p.categoria === cat) && (!q || fold([p.codigo,p.nome,p.aplicacao,p.categoria,p.familia,p.status].join(' ')).includes(q)));
+    const filtered = products.filter(p => (status ? p.status === status : fold(p.status) !== 'inativo') && (!type || p.familia === type) && (!cat || p.categoria === cat) && (!q || fold([p.codigo,...[p.nome,p.aplicacao,p.descricao,p.categoria,p.familia,p.status].flatMap(value=>[value,CF_I18N.t(value)])].join(' ')).includes(q)));
     const countText=`${filtered.length} ${filtered.length === 1 ? 'item' : 'itens'}${demo ? ' · demonstração' : ''}`;
     if($('#result-count').textContent!==countText)$('#result-count').textContent=countText;
     let page = 2, html = '';

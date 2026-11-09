@@ -2,11 +2,13 @@
 
 ## Idiomas — 09/11/2026
 
-Botões PT, EN e ES com bandeiras no cabeçalho do catálogo e do panfleto. Traduzem a interface, filtros, ações, mensagens e rótulos do panfleto. Nomes, aplicações e descrições técnicas continuam exatamente como enviados pela API; a capa oficial permanece a imagem original. Não há serviço externo de tradução.
+Botões PT, EN e ES com bandeiras no cabeçalho do catálogo e do panfleto. Traduzem a interface, filtros, ações, mensagens e rótulos do panfleto. A correção 20261109b também traduz nomes, aplicações e descrições dos 71 itens atuais, nos cards, detalhes, impressão e arte do panfleto. A capa oficial permanece a imagem original. Não há serviço externo de tradução.
+
+As traduções técnicas ficam em `assets/js/traducoes-produtos.js`, vinculadas ao texto original em português, com valores `[inglês, espanhol]`. Novos textos ou alterações de especificação precisam de tradução nesse arquivo; enquanto não houver tradução correspondente, o texto novo aparece no original, sem reaproveitar uma especificação antiga. Estoques, imagens e demais dados continuam vindo da API em tempo real. Não houve alteração da planilha ou do Apps Script.
 
 O parâmetro `lang=en` ou `lang=es` acompanha links de vendedor, produto, QR Code e retorno do panfleto. Sem parâmetro, o catálogo abre em português. A troca preserva filtros, vendedor e galeria, sem nova consulta à API ou recarga das fotos. A atualização silenciosa de estoque continua funcionando.
 
-Para publicar esta revisão, envie `index.html`, `panfleto.html`, `assets/js/catalogo.js`, `assets/js/panfleto.js`, `assets/js/contatos.js`, o novo `assets/js/idiomas.js`, o novo `assets/css/idiomas.css` e a pasta `assets/img/flags/` com seus três SVGs. Verificação: `tests/idiomas-resultados.json` e regressão da atualização automática. Nenhuma publicação foi feita automaticamente.
+Para publicar a correção 20261109b sobre a revisão anterior, envie `index.html`, `panfleto.html`, `assets/js/catalogo.js`, `assets/js/panfleto.js`, `assets/js/idiomas.js` e o novo `assets/js/traducoes-produtos.js`. Se ainda não publicou a revisão inicial dos idiomas, inclua também `assets/js/contatos.js`, `assets/css/idiomas.css` e a pasta `assets/img/flags/` com seus três SVGs. Verificação: `tests/idiomas-resultados.json`, `tests/traducoes-produtos-resultados.json` e regressão da atualização automática. Nenhuma publicação foi feita automaticamente.
 
 ## Capa direta para a coleção — 05/11/2026
 
