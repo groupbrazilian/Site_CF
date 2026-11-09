@@ -1,0 +1,21 @@
+{
+  "languages": [
+    "pt-BR",
+    "en",
+    "es"
+  ],
+  "labels": true,
+  "rawFilterValues": true,
+  "filtersPreserved": true,
+  "galleryPreserved": true,
+  "noImageReloadOnSwitch": true,
+  "stockRefresh": true,
+  "seller": true,
+  "linksAndQR": true,
+  "whatsapp": true,
+  "flyerLabels": true,
+  "originalTechnicalData": true,
+  "mobile": true,
+  "print": true,
+  "errors": []
+}

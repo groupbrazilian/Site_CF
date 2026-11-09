@@ -1,5 +1,13 @@
 # Catálogo digital CF Industrial
 
+## Idiomas — 09/11/2026
+
+Botões PT, EN e ES com bandeiras no cabeçalho do catálogo e do panfleto. Traduzem a interface, filtros, ações, mensagens e rótulos do panfleto. Nomes, aplicações e descrições técnicas continuam exatamente como enviados pela API; a capa oficial permanece a imagem original. Não há serviço externo de tradução.
+
+O parâmetro `lang=en` ou `lang=es` acompanha links de vendedor, produto, QR Code e retorno do panfleto. Sem parâmetro, o catálogo abre em português. A troca preserva filtros, vendedor e galeria, sem nova consulta à API ou recarga das fotos. A atualização silenciosa de estoque continua funcionando.
+
+Para publicar esta revisão, envie `index.html`, `panfleto.html`, `assets/js/catalogo.js`, `assets/js/panfleto.js`, `assets/js/contatos.js`, o novo `assets/js/idiomas.js`, o novo `assets/css/idiomas.css` e a pasta `assets/img/flags/` com seus três SVGs. Verificação: `tests/idiomas-resultados.json` e regressão da atualização automática. Nenhuma publicação foi feita automaticamente.
+
 ## Capa direta para a coleção — 05/11/2026
 
 Removida a página de índice e seus links. A capa aponta para `#colecao`; as aberturas de Ferramentas, Componentes, Máquinas e Serviços foram preservadas. A primeira abertura de família agora é a página 2. Os filtros de busca, família, categoria, status, Limpar e estoque na impressão estão no cabeçalho fixo. No celular ficam sob a opção recolhível “Buscar e filtrar catálogo”. O deslocamento das âncoras acompanha a altura real desse cabeçalho. Cabeçalho/filtros e o aviso de vendedor não geram páginas na impressão.

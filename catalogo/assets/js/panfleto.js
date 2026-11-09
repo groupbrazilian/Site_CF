@@ -33,7 +33,7 @@
   let contact = sellerContext.selected || CF_CONTACTS.primary;
   const catalogBack=new URL('./',location.href);
   if(sellerContext.personal)catalogBack.searchParams.set('vendedor',contact.id);
-  document.querySelector('.toolbar>a').href=catalogBack.href;
+  document.querySelector('.toolbar>a').href=CF_I18N.withLanguage(catalogBack).href;
 
   const clean = v => v == null ? '' : String(v).trim();
 
@@ -454,9 +454,9 @@
     const heroY=Math.max(306,layout.titleY+titleLines.length*titleSize*1.12+28),bodyBottom=contactY-20,heroHeight=bodyBottom-heroY;
     const photoX=layout.margin,photoWidth=layout.imageWidth,panelX=photoX+photoWidth+layout.gap,panelWidth=1080-layout.margin-panelX;
     const blocks=[];
-    if(clean(p.aplicacao))blocks.push({label:'APLICAÇÃO',value:p.aplicacao,icon:'gear'});
-    if(clean(p.descricao)&&!p.nome_por_descricao)blocks.push({label:'DESCRIÇÃO TÉCNICA',value:p.descricao,icon:'document'});
-    if(!blocks.length&&p.categoria_preenchida)blocks.push({label:'CATEGORIA',value:p.categoria,icon:'gear'});
+    if(clean(p.aplicacao))blocks.push({label:CF_I18N.t('APLICAÇÃO'),value:p.aplicacao,icon:'gear'});
+    if(clean(p.descricao)&&!p.nome_por_descricao)blocks.push({label:CF_I18N.t('DESCRIÇÃO TÉCNICA'),value:p.descricao,icon:'document'});
+    if(!blocks.length&&p.categoria_preenchida)blocks.push({label:CF_I18N.t('CATEGORIA'),value:p.categoria,icon:'gear'});
     const panelGap=16,panelTextWidth=panelWidth-64,availableHeight=heroHeight-Math.max(0,blocks.length-1)*panelGap;
     let detailSize=layout.detailSize,needed=0;
     do{needed=0;for(const b of blocks){b.lines=lines(b.value,panelTextWidth,detailSize);b.minHeight=116+b.lines.length*detailSize*1.28+28;needed+=b.minHeight;}if(needed<=availableHeight||detailSize===22)break;detailSize--;}while(true);
@@ -465,12 +465,12 @@
     rect(0,0,1080,138,'#000');
     const symbol=brandSymbol(cf),symbolScale=Math.min(80/symbol.w,82/symbol.h);
     ctx.drawImage(cf,symbol.x,symbol.y,symbol.w,symbol.h,52,30,symbol.w*symbolScale,symbol.h*symbolScale);
-    text('CF INDUSTRIAL',176,27,50,white,800);text('PRECISÃO PARA TRANSMISSÕES AUTOMÁTICAS',178,94,16,white);
-    rect(685,35,2,73,orange);text('CÓDIGO',710,43,12,white);text(p.codigo,710,63,fitText(p.codigo,298,40,18,800),white,800);
+    text('CF INDUSTRIAL',176,27,50,white,800);text(CF_I18N.t('PRECISÃO PARA TRANSMISSÕES AUTOMÁTICAS'),178,94,16,white);
+    rect(685,35,2,73,orange);text(CF_I18N.t('CÓDIGO'),710,43,12,white);text(p.codigo,710,63,fitText(p.codigo,298,40,18,800),white,800);
     titleLines.forEach((line,i)=>{font(titleSize,400,titleFamily);text(line,(1080-ctx.measureText(line).width)/2,layout.titleY+i*titleSize*1.12,titleSize,white,400,titleFamily);});
     let photoBounds=null;
     if(photoResult){const pic=softenBackground(photoResult.img),padding=layout.photoPadding,ratio=Math.min((photoWidth-padding*2)/pic.width,(heroHeight-padding*2)/pic.height),w=pic.width*ratio,h=pic.height*ratio,x=photoX+(photoWidth-w)/2,y=heroY+(heroHeight-h)/2;ctx.save();ctx.beginPath();ctx.roundRect(x,y,w,h,26);ctx.clip();ctx.drawImage(pic,x,y,w,h);ctx.restore();photoBounds={x,y,width:w,height:h};}
-    else{rounded(photoX,heroY,photoWidth,heroHeight,26,'#000');text('FOTO INDISPONÍVEL',photoX+60,heroY+heroHeight/2,25,white,700);}
+    else{rounded(photoX,heroY,photoWidth,heroHeight,26,'#000');text(CF_I18N.t('FOTO INDISPONÍVEL'),photoX+60,heroY+heroHeight/2,25,white,700);}
     let panelY=heroY;
     for(let i=0;i<blocks.length;i++){const b=blocks[i],extra=availableHeight-needed,weight=blocks.length===1?1:(i===0?.42:.58),height=b.minHeight+extra*weight;rounded(panelX,panelY,panelWidth,height,28,'#000');panelIcon(b.icon,panelX+30,panelY+29);text(b.label,panelX+108,panelY+43,fitText(b.label,panelWidth-138,23,18),orange,700);rect(panelX+108,panelY+86,panelWidth-138,3,orange);multiline(b.lines,panelX+32,panelY+116,detailSize,white,400,1.28);panelY+=height+panelGap;}
     rounded(36,contactY,1008,118,25,'#000');ctx.drawImage(icons[0],66,contactY+20,78,78);rect(184,contactY+20,2,78,orange);
@@ -479,7 +479,7 @@
     rect(710,contactY+20,1,78,orange);personIcon(740,contactY+24);text(contact.name.toLocaleUpperCase('pt-BR'),810,contactY+29,fitText(contact.name.toLocaleUpperCase('pt-BR'),212,30,16),white,700);text(contact.region.toLocaleUpperCase('pt-BR'),810,contactY+70,fitText(contact.region.toLocaleUpperCase('pt-BR'),212,19,14,400),white);
     rect(0,footerY,1080,layout.footerHeight,'#000');text('www.cfindustrial.com.br',36,footerY+55,24,white);rect(386,footerY+35,1,72,orange);
     icons.slice(1).forEach((img,i)=>ctx.drawImage(img,433+i*50,footerY+35,27,27));const handle='@oficial.cfindustrial';font(20);text(handle,532-ctx.measureText(handle).width/2,footerY+80,20,white);
-    rect(681,footerY+35,1,72,orange);text('DISTRIBUIDOR',707,footerY+51,13,white);text('OFICIAL',707,footerY+72,13,white);
+    rect(681,footerY+35,1,72,orange);text(CF_I18N.t('distributorLine1'),707,footerY+51,13,white);text(CF_I18N.t('distributorLine2'),707,footerY+72,13,white);
     const logoScale=Math.min(210/brazilian.naturalWidth,76/brazilian.naturalHeight),logoWidth=brazilian.naturalWidth*logoScale,logoHeight=brazilian.naturalHeight*logoScale;ctx.drawImage(brazilian,829+(210-logoWidth)/2,footerY+34+(76-logoHeight)/2,logoWidth,logoHeight);
     const rawBlob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));if(!rawBlob)throw new Error('Não foi possível preparar a imagem para download.');const blob=await printDensity(rawBlob);posterURL=URL.createObjectURL(blob);$('poster').src=posterURL;
     $('poster').alt=`${p.codigo} — ${p.nome}. ${blocks.map(b=>b.label+': '+b.value).join(' ')}. CF Industrial, ${contact.name}, WhatsApp ${display}, www.cfindustrial.com.br, @oficial.cfindustrial. Distribuidor oficial Brazilian Imports.`;
@@ -536,7 +536,7 @@
     url.searchParams.set('contato', contact.id);
     if(url.searchParams.has('vendedor'))url.searchParams.set('vendedor',contact.id);
     history.replaceState(null, '', url);
-    const back=new URL('./',location.href);if(url.searchParams.has('vendedor'))back.searchParams.set('vendedor',contact.id);document.querySelector('.toolbar>a').href=back.href;
+    const back=new URL('./',location.href);if(url.searchParams.has('vendedor'))back.searchParams.set('vendedor',contact.id);document.querySelector('.toolbar>a').href=CF_I18N.withLanguage(back).href;
 
     $('download').disabled = true;
     $('print').disabled = true;
@@ -567,6 +567,8 @@
     }
   };
 
+  document.addEventListener('cf:languagechange',()=>{if(item&&!contactSelect.disabled&&window.CF_FLYER?.ready)contactSelect.onchange();});
+
 
   // Carregamento inicial.
   (async () => {
@@ -574,7 +576,7 @@
       const result = await product();
       item = result.item;
 
-      document.title = item.codigo + ' — Panfleto A5 CF Industrial';
+      document.title = item.codigo + ' — '+CF_I18N.t('Panfleto A5 CF Industrial');
       $('item-label').textContent = item.codigo + ' · ' + item.nome;
 
       if(!contacts.length||sellerContext.invalid){$('message').textContent=contacts.length?'Este vendedor não está mais disponível. Selecione outro contato para gerar o panfleto.':'Nenhum vendedor está disponível no momento.';window.CF_FLYER={ready:false,invalidSeller:true,item,source:result.source};contactSelect.disabled=!contacts.length;return;}

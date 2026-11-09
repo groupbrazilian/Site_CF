@@ -9,7 +9,7 @@
   const find=id=>list.find(c=>c.id===id);
   const primary=list.find(c=>c.primary===true)||list.find(c=>c.phone===CF_CONFIG.WHATSAPP)||list[0];
   function resolve(includeContact=false){const params=new URLSearchParams(location.search),requested=params.get('vendedor')||(includeContact?params.get('contato'):'');return {requested,selected:find(requested),invalid:Boolean(requested&&!find(requested)),personal:Boolean(params.get('vendedor')&&find(params.get('vendedor')))};}
-  function catalogURL(contact,base=CF_CONFIG.DIGITAL_PRODUCT_URL){const url=new URL(base,location.href);url.searchParams.delete('contato');if(contact)url.searchParams.set('vendedor',contact.id);else url.searchParams.delete('vendedor');return url;}
+  function catalogURL(contact,base=CF_CONFIG.DIGITAL_PRODUCT_URL){const url=new URL(base,location.href);url.searchParams.delete('contato');if(contact)url.searchParams.set('vendedor',contact.id);else url.searchParams.delete('vendedor');return window.CF_I18N?CF_I18N.withLanguage(url):url;}
   const format=contact=>contact.phone.replace(/^55/,'').replace(/^(\d{2})(\d{4,5})(\d{4})$/,'($1) $2-$3');
   const whatsapp=(contact,message='')=>'https://wa.me/'+contact.phone+(message?'?text='+encodeURIComponent(message):'');
   window.CF_CONTACTS=Object.freeze({list,find,primary,resolve,catalogURL,format,whatsapp});

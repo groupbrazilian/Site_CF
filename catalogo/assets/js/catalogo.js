@@ -18,10 +18,10 @@
     else {headerFilters.addEventListener('toggle',updateOffset);window.addEventListener('resize',updateOffset);}
   }
   const sellerContext=CF_CONTACTS.resolve(),seller=sellerContext.selected;
-  const messageFor=p=>p?`Olá, gostaria de informações sobre ${p.familia === 'Serviços' ? 'o serviço' : p.familia === 'Máquinas' ? 'a máquina' : p.familia === 'Componentes' ? 'o componente' : 'a ferramenta'} ${p.codigo} – ${p.nome}.`:'Olá, gostaria de solicitar uma análise ou orçamento.';
+  const messageFor=p=>CF_I18N.whatsappMessage(p);
   const whatsapp=(p,c=seller||CF_CONTACTS.primary)=>c?CF_CONTACTS.whatsapp(c,messageFor(p)):'#contato';
   const digitalURL=p=>{const url=CF_CONTACTS.catalogURL(seller);url.searchParams.set('produto',p.codigo);return url.href;};
-  const flyerLink=p=>{const url=new URL('panfleto.html',location.href);url.searchParams.set('produto',p.codigo);if(seller){url.searchParams.set('vendedor',seller.id);url.searchParams.set('contato',seller.id);}return `<a class="flyer-link" data-flyer="${p.id}" href="${esc(url.href)}" target="_blank" rel="noopener">Panfleto ↗</a>`;};
+  const flyerLink=p=>{const url=CF_I18N.withLanguage(new URL('panfleto.html',location.href));url.searchParams.set('produto',p.codigo);if(seller){url.searchParams.set('vendedor',seller.id);url.searchParams.set('contato',seller.id);}return `<a class="flyer-link" data-flyer="${p.id}" href="${esc(url.href)}" target="_blank" rel="noopener">Panfleto ↗</a>`;};
   function chooseSeller(link,kind,p,baseURL){
     let picker=$('#flyer-contacts');if(!picker){picker=document.createElement('dialog');picker.id='flyer-contacts';document.body.append(picker);}
     picker.innerHTML=`<button class="close" aria-label="Fechar escolha de vendedor">×</button><h2>${kind==='flyer'?'Qual vendedor vai no panfleto?':'Com qual vendedor deseja falar?'}</h2><p>${p?esc(p.codigo+' · '+p.nome):'Escolha o atendimento da CF Industrial.'}</p><div class="flyer-contact-options">${CF_CONTACTS.list.map(c=>{const url=kind==='flyer'?new URL(baseURL):new URL(whatsapp(p,c));if(kind==='flyer')url.searchParams.set('contato',c.id);return `<a class="button" target="_blank" rel="noopener" href="${esc(url.href)}"><strong>${esc(c.name)}</strong><span>${esc(c.region)} · ${esc(CF_CONTACTS.format(c))}</span>${c.id===CF_CONTACTS.primary?.id?'<small>Contato principal</small>':''}</a>`;}).join('')||'<p>Nenhum vendedor disponível no momento.</p>'}</div>`;
@@ -165,7 +165,7 @@
     }
     $('#data-message').setAttribute('aria-live',silent?'off':'polite');
     $('#data-message').className='data-message'+(demo?' demo':'');
-    $('#data-message').textContent=demo?'DEMONSTRAÇÃO LOCAL · Dados de desenvolvimento.':`Base consultada em ${result.fetchedAt.toLocaleString('pt-BR')}. Atualização automática a cada 5 minutos. Disponibilidade sujeita a confirmação.`;
+    $('#data-message').textContent=demo?'DEMONSTRAÇÃO LOCAL · Dados de desenvolvimento.':`Base consultada em ${result.fetchedAt.toLocaleString(CF_I18N.locale)}. Atualização automática a cada 5 minutos. Disponibilidade sujeita a confirmação.`;
     if(!initial)CF_SYNC_DOM.restore(state);
     if(initial){deepLinkHandled=true;openDeepLink();}
   }
@@ -261,6 +261,13 @@
   const generalCTA=$('#contato > .button');generalCTA.href=whatsapp();generalCTA.dataset.consult='general';generalCTA.textContent=seller?'Falar com '+seller.name+' ↗':'Escolher vendedor ↗';
   if(sellerContext.requested){const banner=document.createElement('aside');banner.className='seller-context';const general=new URL(location.href);general.searchParams.delete('vendedor');banner.innerHTML=seller?`<strong>Atendimento: ${esc(seller.name)} · ${esc(seller.region)}</strong><span>Consultas e panfletos usarão este contato.</span><a href="${esc(general.href)}">Catálogo geral</a>`:`<strong>Este vendedor não está mais disponível.</strong><span>Escolha outro atendimento ao consultar ou gerar um panfleto.</span><a href="${esc(general.href)}">Catálogo geral</a>`;(document.querySelector('.catalog-header')||document.querySelector('.navigation')).after(banner);}
   const refreshEvery=Number(CF_CONFIG.AUTO_REFRESH_MS)>0?Number(CF_CONFIG.AUTO_REFRESH_MS):300000;
+  document.addEventListener('cf:languagechange',()=>{
+    const state=CF_SYNC_DOM.capture();render({preserve:true});refreshDetail();
+    $('#contato > .button').href=whatsapp();
+    for(const link of document.querySelectorAll('[data-consult]')){const p=products.find(p=>p.id===Number(link.dataset.consult));link.href=whatsapp(p);}
+    if(lastSuccess)$('#data-message').textContent=`Base consultada em ${new Date(lastSuccess).toLocaleString(CF_I18N.locale)}. Atualização automática a cada 5 minutos. Disponibilidade sujeita a confirmação.`;
+    CF_SYNC_DOM.restore(state);
+  });
   const refreshIfVisible=()=>{if(!document.hidden&&!printing&&!matchMedia('print').matches&&!demo)load(true,{silent:true});};
   setInterval(refreshIfVisible,refreshEvery);
   document.addEventListener('visibilitychange',()=>{if(!document.hidden&&Date.now()-lastAttempt>=refreshEvery)refreshIfVisible();});
