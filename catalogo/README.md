@@ -1,5 +1,43 @@
 # Catálogo digital CF Industrial
 
+## Legenda ao lado do Post — 14/11/2026
+
+A página do Post exibe uma legenda pronta para copiar, montada localmente com código, nome, descrição e aplicação do mesmo item da arte. Usa sempre o catálogo geral `https://www.cfindustrial.com.br/catalogo/`, o link exato de valores cadastrado em `assets/js/loja.js` (omitido quando não existir), a frase de distribuição e hashtags fixas. Não usa IA, tradutor externo ou novas consultas. Acompanha PT/EN/ES e oferece seleção manual se a cópia automática estiver bloqueada. A legenda não aparece na imagem baixada nem no PDF/impresso.
+
+Arquivos desta alteração: `post.html`, `assets/js/post.js`, `assets/css/post.css`. A página também depende de `assets/js/loja.js`, incluído na atualização anterior do botão Ver valores. Modelo e hashtags ficam em `captionLabels`, `captionHashtags` e `updateCaption` no arquivo `post.js`. Teste: `tests/conferir-legenda-post.cjs` e `tests/post-legenda-resultados.json` (campos, link por código, cópia, ausência de link, idiomas, celular e impressão). Não publicar `tests/`.
+
+## Botão Ver valores — 14/11/2026
+
+Incluído nos cards e detalhes, ao lado de Panfleto e Post, com rótulos PT/EN/ES. Abre em nova aba a página exata do produto na Brazilian Imports. Válido também no catálogo geral e nos links de vendedores, sem abrir seleção de atendimento. O catálogo não consulta a loja nem importa preços durante o carregamento; os valores são vistos na página da loja.
+
+Cadastro central em `assets/js/loja.js`: 51 associações únicas por código/SKU, conferidas nas páginas públicas da categoria Ferramentas e na busca da loja. 20 itens não tiveram correspondência confirmada e não recebem botão. Não foram associados produtos apenas pela semelhança do nome. Relação completa, pendências e instruções para atualizar: `LINKS-VALORES.md`. O exemplo fornecido é TK1010; o endereço foi preservado exatamente.
+
+Publicar manualmente: `index.html`, `assets/js/loja.js` (novo), `assets/js/catalogo.js`, `assets/js/idiomas.js`, `assets/css/catalogo.css`. Não enviar `tests/`. Não houve publicação, alteração de Apps Script ou mudança nos dados/imagens da API.
+
+Testes: `tests/valores-resultados.json`; todos os 51 links nos cards, ausência dos 20 sem vínculo, detalhes, abertura em nova aba, PT/EN/ES, celular, impressão e regressão da atualização silenciosa/galerias.
+
+## Post com foco no produto — 14/11/2026
+
+Atualizado somente o Post: retirada a marca grande do cabeçalho; título e código começam no topo, seguidos da aplicação em até três linhas. Textos muito longos de aplicação recebem reticências na arte; o texto completo permanece nos dados e na descrição acessível. A foto mantém proporção e passa a ocupar a maior parte da composição, com mais largura e altura, sem cortar a ferramenta.
+
+O rodapé tem três colunas discretas: Qualidade, Fabricado por CF Industrial e Parceiro Brazilian. Para itens da família Serviço, usa Realizado por. Redes sociais e @ permanecem abaixo. Mantidos os downloads JPG/PNG em 2160 × 2700 pixels, PT/EN/ES e o funcionamento do botão.
+
+Para publicar esta revisão sobre a versão anterior, enviar somente `post.html`, `assets/js/post.js` e `assets/js/idiomas.js`. Nenhuma publicação foi realizada. Panfleto e demais páginas não foram alterados.
+
+Conferência: `tests/post-resultados.json`. Em 14/11, o Google respondeu HTTP 429 ao navegador de teste para algumas fotos; os testes de layout usaram cópias baixadas dos mesmos arquivos públicos em `tests/fotos-post/`. O código de produção continua usando somente as URLs da API e as alternativas de exportação existentes, sem imagens locais de teste ou alteração do Apps Script.
+
+## Botão Post — 12/11/2026
+
+Cada card e detalhe tem Post ao lado de Panfleto. O post abre em `post.html?produto=CODIGO`, sem escolha de vendedor, com fundo preto, título branco em Bebas Neue, código laranja, uma foto do item, marca CF Industrial, qualidade, parceiro Brazilian e as quatro redes com `@oficial.cfindustrial`. Não inclui telefone, estoque, promoção, entrega ou descrições longas.
+
+Downloads JPG e PNG em 2160 × 2700 pixels, composição vertical 4:5. Também permite imprimir/salvar PDF. A foto selecionada na galeria é reaproveitada. O idioma e o link de retorno por vendedor são preservados. Nome, código e imagens vêm dos mesmos dados do catálogo; não há cadastro separado para o post.
+
+A página do catálogo não carrega o gerador, fontes ou logos do Post. A geração ocorre somente na nova página. Ao abrir pelo catálogo, um retrato temporário do item é transferido por referência validada por código e validade de 15 minutos; links diretos consultam a API. A troca de idioma do post reaproveita foto/logos já carregados, sem consultar a API de novo. As URLs e alternativas de exportação da foto são as mesmas do panfleto existente.
+
+Arquivos desta revisão para publicar manualmente dentro de `catalogo/`: `index.html`, `post.html` (novo), `assets/js/catalogo.js`, `assets/js/idiomas.js`, `assets/js/post.js` (novo), `assets/css/catalogo.css`, `assets/css/post.css` (novo). Mantém os assets de marca/fonte que já existem. Não é necessário enviar `tests/`. Não houve publicação, alteração do Apps Script ou DNS.
+
+Conferência: `tests/post-resultados.json`; fotos reais de TK200A, TK1717, MCVT, SERV01 e CF-RECVT; botões nos cards e detalhes; JPG/PNG; título longo; PT/EN/ES; celular; impressão de uma página; regressão da atualização automática de 5 minutos.
+
 ## Idiomas — 09/11/2026
 
 Botões PT, EN e ES com bandeiras no cabeçalho do catálogo e do panfleto. Traduzem a interface, filtros, ações, mensagens e rótulos do panfleto. A correção 20261109b também traduz nomes, aplicações e descrições dos 71 itens atuais, nos cards, detalhes, impressão e arte do panfleto. A capa oficial permanece a imagem original. Não há serviço externo de tradução.

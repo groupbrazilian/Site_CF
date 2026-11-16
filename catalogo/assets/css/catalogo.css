@@ -93,6 +93,8 @@
 
 .product-copy > *{max-width:100%}
 .flyer-link{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--orange);padding:6px 10px;color:#b64600;font-weight:700;font-size:11px;text-decoration:none;border-radius:3px;background:#fff9f4;white-space:nowrap}.flyer-link:hover,.flyer-link:focus-visible{background:#ff6b00;color:#fff}.detail-flyer-action{margin-top:16px}.detail-flyer-action .flyer-link{font-size:14px;padding:10px 16px}
+.post-link{display:inline-flex;align-items:center;justify-content:center;border:1px solid #242424;padding:6px 10px;color:#fff;font-weight:700;font-size:11px;text-decoration:none;border-radius:3px;background:#242424;white-space:nowrap}.post-link:hover,.post-link:focus-visible{background:#ff6b00;border-color:#ff6b00;color:#fff}.detail-flyer-action{display:flex;gap:10px;flex-wrap:wrap}.detail-flyer-action .post-link{font-size:14px;padding:10px 16px}@media print{.post-link{display:none!important}}
+.price-link{display:inline-flex;align-items:center;justify-content:center;gap:5px;border:1px solid var(--orange);padding:6px 10px;color:#171717;background:var(--orange);font-weight:700;font-size:11px;text-decoration:none;border-radius:3px;white-space:nowrap}.price-link:hover,.price-link:focus-visible{background:#ec5d00;border-color:#ec5d00}.detail-flyer-action .price-link{font-size:14px;padding:10px 16px}@media print{.price-link{display:none!important}}
 @media print{.flyer-link,.detail-flyer-action{display:none!important}}
 
 /* Final editorial treatment: supplied artwork, quiet black edge and collection openings. */

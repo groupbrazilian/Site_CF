@@ -22,6 +22,16 @@
   const whatsapp=(p,c=seller||CF_CONTACTS.primary)=>c?CF_CONTACTS.whatsapp(c,messageFor(p)):'#contato';
   const digitalURL=p=>{const url=CF_CONTACTS.catalogURL(seller);url.searchParams.set('produto',p.codigo);return url.href;};
   const flyerLink=p=>{const url=CF_I18N.withLanguage(new URL('panfleto.html',location.href));url.searchParams.set('produto',p.codigo);if(seller){url.searchParams.set('vendedor',seller.id);url.searchParams.set('contato',seller.id);}return `<a class="flyer-link" data-flyer="${p.id}" href="${esc(url.href)}" target="_blank" rel="noopener">Panfleto ↗</a>`;};
+  const postLink=p=>{const url=CF_I18N.withLanguage(new URL('post.html',location.href));url.searchParams.set('produto',p.codigo);if(seller)url.searchParams.set('vendedor',seller.id);return `<a class="post-link" data-post="${p.id}" href="${esc(url.href)}" target="_blank" rel="noopener">Post ↗</a>`;};
+  const priceLink=p=>{const url=window.CF_STORE?.urlFor(p.codigo);return url?`<a class="price-link" data-store-code="${esc(p.codigo)}" href="${esc(url)}" target="_blank" rel="noopener noreferrer" title="Ver valores na Brazilian Imports">Ver valores ↗</a>`:'';};
+  document.addEventListener('click',e=>{
+    const link=e.target.closest('[data-post]');if(!link)return;
+    const p=products.find(p=>p.id===Number(link.dataset.post));if(!p)return;
+    const token=Date.now().toString(36),url=new URL(link.href),selected=link.closest('#detail')?.querySelector('.detail-main')?.src;
+    const item={...p,imagem_grande:selected&&!selected.includes('placeholder.svg')?selected:p.imagem_grande};
+    try{localStorage.setItem('cf-post:'+p.codigo,JSON.stringify({token,createdAt:Date.now(),item}));url.searchParams.set('ref',token);}catch{}
+    link.href=url.href;
+  });
   function chooseSeller(link,kind,p,baseURL){
     let picker=$('#flyer-contacts');if(!picker){picker=document.createElement('dialog');picker.id='flyer-contacts';document.body.append(picker);}
     picker.innerHTML=`<button class="close" aria-label="Fechar escolha de vendedor">×</button><h2>${kind==='flyer'?'Qual vendedor vai no panfleto?':'Com qual vendedor deseja falar?'}</h2><p>${p?esc(p.codigo+' · '+p.nome):'Escolha o atendimento da CF Industrial.'}</p><div class="flyer-contact-options">${CF_CONTACTS.list.map(c=>{const url=kind==='flyer'?new URL(baseURL):new URL(whatsapp(p,c));if(kind==='flyer')url.searchParams.set('contato',c.id);return `<a class="button" target="_blank" rel="noopener" href="${esc(url.href)}"><strong>${esc(c.name)}</strong><span>${esc(c.region)} · ${esc(CF_CONTACTS.format(c))}</span>${c.id===CF_CONTACTS.primary?.id?'<small>Contato principal</small>':''}</a>`;}).join('')||'<p>Nenhum vendedor disponível no momento.</p>'}</div>`;
@@ -70,7 +80,7 @@
     const count = Math.max(p.quantidade_imagens, p.imagens.length);
     const urls = [CF_API.imageURLs(p)];
     if (multiple) urls.push([p.imagens[1]?.thumbnail,p.imagens[1]?.url,p.imagens[1]?.url_original].filter(Boolean));
-    return `<article class="product ${multiple ? 'ferramenta-multipla' : 'ferramenta-simples'}${wide ? ' product-wide' : ''}" data-sync-key="${esc('product:'+fold(p.codigo))}" data-code="${esc(p.codigo)}"><div class="product-photos">${urls.map((url, i) => `<div class="product-image" data-detail="${p.id}" role="img" aria-label="${esc(p.nome)} — foto ${i+1}">${picture(url, `${p.nome} — foto ${i+1}`)}</div>`).join('')}${count > 2 ? `<span class="extra-photos">+ ${count - 2} ${count - 2 === 1 ? 'foto' : 'fotos'}</span>` : ''}</div><div class="product-copy"><div class="product-meta"><span class="code">${esc(p.codigo)}</span>${fold(p.status) !== 'ativo' ? `<span class="status">${esc(p.status)}</span>` : ''}${p.prioridade && fold(p.prioridade)!==fold(p.status)?`<span class="status">Prioridade: ${esc(p.prioridade)}</span>`:''}</div><h3 class="product-name">${esc(p.nome)}</h3>${p.categoria_preenchida ? `<p class="category-label">${esc(p.categoria)}</p>` : ''}${p.aplicacao ? `<div class="technical"><h4>Aplicação</h4><p>${esc(p.aplicacao)}</p></div>` : ''}${p.descricao && !p.nome_por_descricao ? `<div class="technical description"><h4>Descrição técnica</h4><p>${esc(p.descricao)}</p></div>` : ''}${stockHTML(p)}<div class="product-actions"><button class="detail-link" data-detail="${p.id}">Ver detalhes +</button>${flyerLink(p)}<a class="quote" data-consult="${p.id}" href="${esc(whatsapp(p))}" target="_blank" rel="noopener">${esc(cta(p))} ↗</a></div><a class="print-qr" data-qr-url="${esc(digitalURL(p))}" href="${esc(digitalURL(p))}"><span class="qr-symbol"></span><span>Ver produto digital<br><small>Mais imagens e informações</small></span></a></div></article>`;
+    return `<article class="product ${multiple ? 'ferramenta-multipla' : 'ferramenta-simples'}${wide ? ' product-wide' : ''}" data-sync-key="${esc('product:'+fold(p.codigo))}" data-code="${esc(p.codigo)}"><div class="product-photos">${urls.map((url, i) => `<div class="product-image" data-detail="${p.id}" role="img" aria-label="${esc(p.nome)} — foto ${i+1}">${picture(url, `${p.nome} — foto ${i+1}`)}</div>`).join('')}${count > 2 ? `<span class="extra-photos">+ ${count - 2} ${count - 2 === 1 ? 'foto' : 'fotos'}</span>` : ''}</div><div class="product-copy"><div class="product-meta"><span class="code">${esc(p.codigo)}</span>${fold(p.status) !== 'ativo' ? `<span class="status">${esc(p.status)}</span>` : ''}${p.prioridade && fold(p.prioridade)!==fold(p.status)?`<span class="status">Prioridade: ${esc(p.prioridade)}</span>`:''}</div><h3 class="product-name">${esc(p.nome)}</h3>${p.categoria_preenchida ? `<p class="category-label">${esc(p.categoria)}</p>` : ''}${p.aplicacao ? `<div class="technical"><h4>Aplicação</h4><p>${esc(p.aplicacao)}</p></div>` : ''}${p.descricao && !p.nome_por_descricao ? `<div class="technical description"><h4>Descrição técnica</h4><p>${esc(p.descricao)}</p></div>` : ''}${stockHTML(p)}<div class="product-actions"><button class="detail-link" data-detail="${p.id}">Ver detalhes +</button>${flyerLink(p)}${postLink(p)}${priceLink(p)}<a class="quote" data-consult="${p.id}" href="${esc(whatsapp(p))}" target="_blank" rel="noopener">${esc(cta(p))} ↗</a></div><a class="print-qr" data-qr-url="${esc(digitalURL(p))}" href="${esc(digitalURL(p))}"><span class="qr-symbol"></span><span>Ver produto digital<br><small>Mais imagens e informações</small></span></a></div></article>`;
   }
   function paginate(group) {
     const capacity = Math.max(2, Math.floor(Number(CF_CONFIG.PRODUCTS_PER_PAGE) / 2) * 2 || 6);
@@ -116,7 +126,7 @@
     $('.last-page').textContent = String(page).padStart(2,'0');
     wireImages($('#colecao'));
   }
-  function detailCopyHTML(p){return `<div class="detail-copy"><p class="eyebrow">${esc(p.familia)}${p.categoria_preenchida ? ' / ' + esc(p.categoria) : ''}</p><p class="code">${esc(p.codigo)}</p><h2 id="detail-title">${esc(p.nome)}</h2><p class="status">${esc(p.status)}</p><dl>${p.prioridade?`<dt>Prioridade</dt><dd>${esc(p.prioridade)}</dd>`:''}${p.aplicacao ? `<dt>Aplicação</dt><dd>${esc(p.aplicacao)}</dd>` : ''}${p.descricao && !p.nome_por_descricao ? `<dt>Descrição técnica</dt><dd>${esc(p.descricao)}</dd>` : ''}${stockHTML(p,true)}</dl><a class="button primary" data-consult="${p.id}" href="${esc(whatsapp(p))}" target="_blank" rel="noopener">${esc(cta(p))} pelo WhatsApp ↗</a><div class="detail-flyer-action">${flyerLink(p)}</div></div>`;}
+  function detailCopyHTML(p){return `<div class="detail-copy"><p class="eyebrow">${esc(p.familia)}${p.categoria_preenchida ? ' / ' + esc(p.categoria) : ''}</p><p class="code">${esc(p.codigo)}</p><h2 id="detail-title">${esc(p.nome)}</h2><p class="status">${esc(p.status)}</p><dl>${p.prioridade?`<dt>Prioridade</dt><dd>${esc(p.prioridade)}</dd>`:''}${p.aplicacao ? `<dt>Aplicação</dt><dd>${esc(p.aplicacao)}</dd>` : ''}${p.descricao && !p.nome_por_descricao ? `<dt>Descrição técnica</dt><dd>${esc(p.descricao)}</dd>` : ''}${stockHTML(p,true)}</dl><a class="button primary" data-consult="${p.id}" href="${esc(whatsapp(p))}" target="_blank" rel="noopener">${esc(cta(p))} pelo WhatsApp ↗</a><div class="detail-flyer-action">${flyerLink(p)}${postLink(p)}${priceLink(p)}</div></div>`;}
   function openDetail(id,{preserve=false,selectedURL} = {}) {
     const p = products.find(p => p.id === id); if (!p) return;
     const gallery = p.imagens.length ? p.imagens.map((img,i) => ({...img, urls:i===0?CF_API.imageURLs(p,true):[img.url,img.thumbnail,img.url_original].filter(Boolean), url: i === 0 ? p.imagem_grande || img.url : img.url})) : [{url:p.imagem_grande || p.imagem,urls:CF_API.imageURLs(p,true), thumbnail:p.imagem, nome:p.nome}].filter(img=>img.url);
@@ -275,6 +285,8 @@
   window.addEventListener('pageshow',event=>{if(event.persisted)refreshIfVisible();});
   load();
 })();
+
+
 
 
 

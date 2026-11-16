@@ -1,6 +1,9 @@
 (() => {
   'use strict';
   const dictionary={
+    'Ver valores':['View prices','Ver precios'],'Ver valores na Brazilian Imports':['View prices at Brazilian Imports','Ver precios en Brazilian Imports'],
+    'FABRICADO POR':['MANUFACTURED BY','FABRICADO POR'],'REALIZADO POR':['PROVIDED BY','REALIZADO POR'],
+    'Post CF Industrial':['CF Industrial Post','Publicación CF Industrial'],'Preparando o post…':['Preparing the post…','Preparando la publicación…'],'Baixar JPG':['Download JPG','Descargar JPG'],'QUALIDADE':['QUALITY','CALIDAD'],'PARCEIRO':['PARTNER','SOCIO'],'Post pronto para baixar.':['Post ready to download.','Publicación lista para descargar.'],'Post pronto, mas a foto não pôde ser carregada. Confira o acesso público da imagem.':['Post ready, but the photo could not be loaded. Check public image access.','Publicación lista, pero no se pudo cargar la foto. Compruebe el acceso público de la imagen.'],'O título deste item é muito extenso para o post.':['The item title is too long for the post.','El título del artículo es demasiado largo para la publicación.'],'Abra o botão Post no item desejado do catálogo.':['Open the Post button on the desired catalog item.','Abra el botón Post del artículo deseado del catálogo.'],
     'Catálogo técnico':['Technical catalog','Catálogo técnico'],'Status':['Status','Estado'],
     'Catálogo técnico | CF Industrial':['Technical catalog | CF Industrial','Catálogo técnico | CF Industrial'],
     'Catálogo':['Catalog','Catálogo'],'Contato':['Contact','Contacto'],'Ir para o catálogo':['Skip to catalog','Ir al catálogo'],
@@ -112,10 +115,10 @@
     for(const child of [...root.childNodes])walk(child);
   }
   function links(){
-    for(const a of document.querySelectorAll('a[data-flyer],a.print-qr,.seller-context a,.toolbar>a')){const url=withLanguage(a.href);if(a.href!==url.href)a.href=url.href;if(a.hasAttribute('data-qr-url'))a.dataset.qrUrl=url.href;}
+    for(const a of document.querySelectorAll('a[data-flyer],a[data-post],a.print-qr,.seller-context a,.toolbar>a')){const url=withLanguage(a.href);if(a.href!==url.href)a.href=url.href;if(a.hasAttribute('data-qr-url'))a.dataset.qrUrl=url.href;}
     for(const input of document.querySelectorAll('input.seller-url'))input.value=withLanguage(input.value).href;
   }
-  function apply(root=document.body){observer?.disconnect();walk(root);links();document.documentElement.lang=language;document.title=document.querySelector('#renderer')?(new URLSearchParams(location.search).get('produto')||'CF Industrial')+' — '+t('Panfleto A5 CF Industrial'):t('Catálogo técnico | CF Industrial');for(const a of document.querySelectorAll('[data-cf-language]')){const selected=a.dataset.cfLanguage===language;a.setAttribute('aria-current',selected?'true':'false');const url=new URL(location.href);url.searchParams.set('lang',a.dataset.cfLanguage);a.href=url.href;}observer?.observe(document.body,{childList:true,characterData:true,subtree:true});}
+  function apply(root=document.body){observer?.disconnect();walk(root);links();document.documentElement.lang=language;document.title=document.querySelector('#renderer')?(new URLSearchParams(location.search).get('produto')||'CF Industrial')+' — '+t(document.body.dataset.artwork==='post'?'Post CF Industrial':'Panfleto A5 CF Industrial'):t('Catálogo técnico | CF Industrial');for(const a of document.querySelectorAll('[data-cf-language]')){const selected=a.dataset.cfLanguage===language;a.setAttribute('aria-current',selected?'true':'false');const url=new URL(location.href);url.searchParams.set('lang',a.dataset.cfLanguage);a.href=url.href;}observer?.observe(document.body,{childList:true,characterData:true,subtree:true});}
   function setLanguage(next){if(!['pt-BR','en','es'].includes(next))return;language=next;const url=new URL(location.href);url.searchParams.set('lang',next);history.replaceState(null,'',url);document.dispatchEvent(new CustomEvent('cf:languagechange'));apply();}
   function whatsappMessage(p){if(language==='pt-BR')return p?`Olá, gostaria de informações sobre ${p.familia==='Serviços'?'o serviço':p.familia==='Máquinas'?'a máquina':p.familia==='Componentes'?'o componente':'a ferramenta'} ${p.codigo} – ${p.nome}.`:'Olá, gostaria de solicitar uma análise ou orçamento.';
     if(!p)return language==='en'?'Hello, I would like to request an assessment or quote.':'Hola, quisiera solicitar un análisis o presupuesto.';
@@ -128,3 +131,4 @@
   observer=new MutationObserver(records=>{observer.disconnect();for(const r of records){if(r.type==='characterData')walk(r.target);else for(const n of r.addedNodes)walk(n);}links();observer.observe(document.body,{childList:true,characterData:true,subtree:true});});
   observer.observe(document.body,{childList:true,characterData:true,subtree:true});
 })();
+
