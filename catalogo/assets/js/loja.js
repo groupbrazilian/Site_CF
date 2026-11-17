@@ -1,7 +1,8 @@
 /* Links diretos conferidos por código/SKU em 14/11/2026.
  * Para incluir/alterar um produto, edite somente o par CODIGO: URL abaixo.
- * Não coloque valores aqui: o cliente consulta o preço atual na própria loja.
- * Itens sem correspondência confirmada não recebem botão.
+ * Os valores ficam em data/precos-loja.json, atualizados por atualizar-valores.cjs.
+ * Os links continuam sendo a fonte dos preços e das legendas dos Posts.
+ * Itens sem correspondência confirmada ficam com valor sob consulta.
  */
 (() => {
   'use strict';

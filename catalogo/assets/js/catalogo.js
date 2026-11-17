@@ -21,9 +21,34 @@
   const messageFor=p=>CF_I18N.whatsappMessage(p);
   const whatsapp=(p,c=seller||CF_CONTACTS.primary)=>c?CF_CONTACTS.whatsapp(c,messageFor(p)):'#contato';
   const digitalURL=p=>{const url=CF_CONTACTS.catalogURL(seller);url.searchParams.set('produto',p.codigo);return url.href;};
-  const flyerLink=p=>{const url=CF_I18N.withLanguage(new URL('panfleto.html',location.href));url.searchParams.set('produto',p.codigo);if(seller){url.searchParams.set('vendedor',seller.id);url.searchParams.set('contato',seller.id);}return `<a class="flyer-link" data-flyer="${p.id}" href="${esc(url.href)}" target="_blank" rel="noopener">Panfleto ↗</a>`;};
-  const postLink=p=>{const url=CF_I18N.withLanguage(new URL('post.html',location.href));url.searchParams.set('produto',p.codigo);if(seller)url.searchParams.set('vendedor',seller.id);return `<a class="post-link" data-post="${p.id}" href="${esc(url.href)}" target="_blank" rel="noopener">Post ↗</a>`;};
-  const priceLink=p=>{const url=window.CF_STORE?.urlFor(p.codigo);return url?`<a class="price-link" data-store-code="${esc(p.codigo)}" href="${esc(url)}" target="_blank" rel="noopener noreferrer" title="Ver valores na Brazilian Imports">Ver valores ↗</a>`:'';};
+  const artworkIcon=kind=>`<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${kind==='flyer'?'<path d="m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2Z"/><path d="M9 3v16M15 5v16"/>':'<rect x="4" y="2" width="16" height="20" rx="2"/><circle cx="9" cy="8" r="1.5"/><path d="m5 17 5-5 4 4 3-3 3 4M8 19h8"/>'}</svg>`;
+  const generationTools=p=>`<div class="generation-tools" role="group" aria-label="Gerar material"><span>Gerar:</span>${flyerLink(p)}${postLink(p)}</div>`;
+  const flyerLink=p=>{const url=CF_I18N.withLanguage(new URL('panfleto.html',location.href));url.searchParams.set('produto',p.codigo);if(seller){url.searchParams.set('vendedor',seller.id);url.searchParams.set('contato',seller.id);}return `<a class="flyer-link" data-flyer="${p.id}" href="${esc(url.href)}" target="_blank" rel="noopener" title="Gerar panfleto" aria-label="Gerar panfleto">${artworkIcon('flyer')}</a>`;};
+  const postLink=p=>{const url=CF_I18N.withLanguage(new URL('post.html',location.href));url.searchParams.set('produto',p.codigo);if(seller)url.searchParams.set('vendedor',seller.id);return `<a class="post-link" data-post="${p.id}" href="${esc(url.href)}" target="_blank" rel="noopener" title="Gerar post" aria-label="Gerar post">${artworkIcon('post')}</a>`;};
+  let priceSnapshot=null,pricesLoading=false;
+  const priceLink=p=>`<span class="store-price" data-price-code="${esc(p.codigo)}">Valor sob consulta</span>`;
+  function paintPrices(){
+    for(const badge of document.querySelectorAll('[data-price-code]')){
+      const record=priceSnapshot?.products?.[badge.dataset.priceCode.toUpperCase()];
+      const valid=record?.currency==='BRL'&&typeof record.amount==='number'&&Number.isFinite(record.amount)&&record.amount>0&&Number.isFinite(Date.parse(record.checkedAt));
+      badge.classList.toggle('has-price',valid);
+      badge.textContent=valid?new Intl.NumberFormat(CF_I18N.locale,{style:'currency',currency:'BRL'}).format(record.amount)+' *':CF_I18N.t('Valor sob consulta');
+      badge.title=valid?CF_I18N.t('Preço de referência')+' · '+new Date(record.checkedAt).toLocaleDateString(CF_I18N.locale):CF_I18N.t('Consulte o vendedor para saber o valor.');
+    }
+  }
+  async function loadPrices(){
+    if(pricesLoading)return;pricesLoading=true;
+    try{
+      const response=await fetch('data/precos-loja.json?_='+Date.now(),{cache:'no-store',signal:AbortSignal.timeout(15000)});
+      if(!response.ok)throw new Error('Preços indisponíveis');
+      const next=await response.json();if(!next.products||typeof next.products!=='object'||!Number.isFinite(Date.parse(next.updatedAt)))throw new Error('Preços inválidos');
+      priceSnapshot=next;paintPrices();
+    }catch{/* Mantém a última consulta válida; sem preço confirmado, orienta a consultar. */}
+    finally{pricesLoading=false;}
+  }
+  // Atualiza somente os valores, sem recriar fotos, galerias ou filtros.
+  new MutationObserver(records=>{if(records.some(r=>[...r.addedNodes].some(n=>n.nodeType===1&&(n.matches('[data-price-code]')||n.querySelector('[data-price-code]')))))paintPrices();}).observe($('#colecao'),{childList:true,subtree:true});
+  new MutationObserver(records=>{if(records.some(r=>[...r.addedNodes].some(n=>n.nodeType===1&&(n.matches('[data-price-code]')||n.querySelector('[data-price-code]')))))paintPrices();}).observe($('#detail-content'),{childList:true,subtree:true});
   document.addEventListener('click',e=>{
     const link=e.target.closest('[data-post]');if(!link)return;
     const p=products.find(p=>p.id===Number(link.dataset.post));if(!p)return;
@@ -51,7 +76,8 @@
   const footer = (label, number) => `<footer class="folio"><span>CF INDUSTRIAL / ${esc(label)}</span><span>CATÁLOGO TÉCNICO</span><span>${String(number).padStart(2,'0')}</span></footer>`;
   const context = (family,category) => `<span class="section-context"><strong>${esc(family)}</strong>${category && category !== 'Sem categoria' ? '<span class="context-slash">/</span><span class="context-category">'+esc(category)+'</span>' : ''}</span>`;
   const running = (family,category) => `<div class="running product-running"><div class="running-brand"><img src="assets/img/logo-cf-industrial.png" alt="CF"><span>CF INDUSTRIAL <small>CATÁLOGO TÉCNICO</small></span></div>${context(family,category)}</div>`;
-  const cta = p => ({Ferramentas:'Consultar ferramenta',Componentes:'Consultar componente','Máquinas':'Solicitar proposta da máquina','Serviços':'Solicitar orçamento do serviço'})[p.familia] || 'Solicitar orçamento';
+  document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('.product-image[data-detail]')){e.preventDefault();e.target.click();}});
+  const cta = () => '* Consulte formas de pagamento com o vendedor';
   function stockHTML(p,detail=false) {
     const entries=[['PR','Paraná',p.estoque_pr,p.estoque_pr_preenchido],['SC','Santa Catarina',p.estoque_sc,p.estoque_sc_preenchido]].filter(e=>p.familia!=='Serviços'||e[3]);
     if(!entries.length)return '';
@@ -80,7 +106,7 @@
     const count = Math.max(p.quantidade_imagens, p.imagens.length);
     const urls = [CF_API.imageURLs(p)];
     if (multiple) urls.push([p.imagens[1]?.thumbnail,p.imagens[1]?.url,p.imagens[1]?.url_original].filter(Boolean));
-    return `<article class="product ${multiple ? 'ferramenta-multipla' : 'ferramenta-simples'}${wide ? ' product-wide' : ''}" data-sync-key="${esc('product:'+fold(p.codigo))}" data-code="${esc(p.codigo)}"><div class="product-photos">${urls.map((url, i) => `<div class="product-image" data-detail="${p.id}" role="img" aria-label="${esc(p.nome)} — foto ${i+1}">${picture(url, `${p.nome} — foto ${i+1}`)}</div>`).join('')}${count > 2 ? `<span class="extra-photos">+ ${count - 2} ${count - 2 === 1 ? 'foto' : 'fotos'}</span>` : ''}</div><div class="product-copy"><div class="product-meta"><span class="code">${esc(p.codigo)}</span>${fold(p.status) !== 'ativo' ? `<span class="status">${esc(p.status)}</span>` : ''}${p.prioridade && fold(p.prioridade)!==fold(p.status)?`<span class="status">Prioridade: ${esc(p.prioridade)}</span>`:''}</div><h3 class="product-name">${esc(p.nome)}</h3>${p.categoria_preenchida ? `<p class="category-label">${esc(p.categoria)}</p>` : ''}${p.aplicacao ? `<div class="technical"><h4>Aplicação</h4><p>${esc(p.aplicacao)}</p></div>` : ''}${p.descricao && !p.nome_por_descricao ? `<div class="technical description"><h4>Descrição técnica</h4><p>${esc(p.descricao)}</p></div>` : ''}${stockHTML(p)}<div class="product-actions"><button class="detail-link" data-detail="${p.id}">Ver detalhes +</button>${flyerLink(p)}${postLink(p)}${priceLink(p)}<a class="quote" data-consult="${p.id}" href="${esc(whatsapp(p))}" target="_blank" rel="noopener">${esc(cta(p))} ↗</a></div><a class="print-qr" data-qr-url="${esc(digitalURL(p))}" href="${esc(digitalURL(p))}"><span class="qr-symbol"></span><span>Ver produto digital<br><small>Mais imagens e informações</small></span></a></div></article>`;
+    return `<article class="product ${multiple ? 'ferramenta-multipla' : 'ferramenta-simples'}${wide ? ' product-wide' : ''}" data-sync-key="${esc('product:'+fold(p.codigo))}" data-code="${esc(p.codigo)}"><div class="product-photos">${urls.map((url, i) => `<div class="product-image" data-detail="${p.id}" role="button" tabindex="0" aria-label="${esc(p.nome)} — foto ${i+1}">${picture(url, `${p.nome} — foto ${i+1}`)}</div>`).join('')}${count > 2 ? `<span class="extra-photos">+ ${count - 2} ${count - 2 === 1 ? 'foto' : 'fotos'}</span>` : ''}</div><div class="product-copy"><div class="product-meta"><span class="code">${esc(p.codigo)}</span>${fold(p.status) !== 'ativo' ? `<span class="status">${esc(p.status)}</span>` : ''}${p.prioridade && fold(p.prioridade)!==fold(p.status)?`<span class="status">Prioridade: ${esc(p.prioridade)}</span>`:''}${generationTools(p)}</div><h3 class="product-name">${esc(p.nome)}</h3>${p.categoria_preenchida ? `<p class="category-label">${esc(p.categoria)}</p>` : ''}${p.aplicacao ? `<div class="technical"><h4>Aplicação</h4><p>${esc(p.aplicacao)}</p></div>` : ''}${p.descricao && !p.nome_por_descricao ? `<div class="technical description"><h4>Descrição técnica</h4><p>${esc(p.descricao)}</p></div>` : ''}${stockHTML(p)}<div class="product-actions">${priceLink(p)}<a class="quote" data-consult="${p.id}" href="${esc(whatsapp(p))}" target="_blank" rel="noopener">${esc(cta(p))} ↗</a></div><a class="print-qr" data-qr-url="${esc(digitalURL(p))}" href="${esc(digitalURL(p))}"><span class="qr-symbol"></span><span>Ver produto digital<br><small>Mais imagens e informações</small></span></a></div></article>`;
   }
   function paginate(group) {
     const capacity = Math.max(2, Math.floor(Number(CF_CONFIG.PRODUCTS_PER_PAGE) / 2) * 2 || 6);
@@ -126,7 +152,7 @@
     $('.last-page').textContent = String(page).padStart(2,'0');
     wireImages($('#colecao'));
   }
-  function detailCopyHTML(p){return `<div class="detail-copy"><p class="eyebrow">${esc(p.familia)}${p.categoria_preenchida ? ' / ' + esc(p.categoria) : ''}</p><p class="code">${esc(p.codigo)}</p><h2 id="detail-title">${esc(p.nome)}</h2><p class="status">${esc(p.status)}</p><dl>${p.prioridade?`<dt>Prioridade</dt><dd>${esc(p.prioridade)}</dd>`:''}${p.aplicacao ? `<dt>Aplicação</dt><dd>${esc(p.aplicacao)}</dd>` : ''}${p.descricao && !p.nome_por_descricao ? `<dt>Descrição técnica</dt><dd>${esc(p.descricao)}</dd>` : ''}${stockHTML(p,true)}</dl><a class="button primary" data-consult="${p.id}" href="${esc(whatsapp(p))}" target="_blank" rel="noopener">${esc(cta(p))} pelo WhatsApp ↗</a><div class="detail-flyer-action">${flyerLink(p)}${postLink(p)}${priceLink(p)}</div></div>`;}
+  function detailCopyHTML(p){return `<div class="detail-copy"><p class="eyebrow">${esc(p.familia)}${p.categoria_preenchida ? ' / ' + esc(p.categoria) : ''}</p><p class="code">${esc(p.codigo)}</p><h2 id="detail-title">${esc(p.nome)}</h2><div class="detail-meta"><p class="status">${esc(p.status)}</p>${generationTools(p)}</div><dl>${p.prioridade?`<dt>Prioridade</dt><dd>${esc(p.prioridade)}</dd>`:''}${p.aplicacao ? `<dt>Aplicação</dt><dd>${esc(p.aplicacao)}</dd>` : ''}${p.descricao && !p.nome_por_descricao ? `<dt>Descrição técnica</dt><dd>${esc(p.descricao)}</dd>` : ''}${stockHTML(p,true)}</dl><div class="product-actions detail-actions">${priceLink(p)}<a class="button primary" data-consult="${p.id}" href="${esc(whatsapp(p))}" target="_blank" rel="noopener">${esc(cta(p))} ↗</a></div></div>`;}
   function openDetail(id,{preserve=false,selectedURL} = {}) {
     const p = products.find(p => p.id === id); if (!p) return;
     const gallery = p.imagens.length ? p.imagens.map((img,i) => ({...img, urls:i===0?CF_API.imageURLs(p,true):[img.url,img.thumbnail,img.url_original].filter(Boolean), url: i === 0 ? p.imagem_grande || img.url : img.url})) : [{url:p.imagem_grande || p.imagem,urls:CF_API.imageURLs(p,true), thumbnail:p.imagem, nome:p.nome}].filter(img=>img.url);
@@ -261,10 +287,12 @@
   window.addEventListener('afterprint',()=>{printing=false;if(deferredResult){const result=deferredResult;deferredResult=null;applyResult(result,{silent:true});}else render({preserve:true});});
   window.CF_CATALOG = {preparePrint};
   document.querySelectorAll('.print-button').forEach(b=>b.addEventListener('click',print));
+  const visibleContacts=seller?[seller]:CF_CONTACTS.list;
   const contactList=document.createElement('div');contactList.className='regional-contacts';
-  contactList.innerHTML=[...new Set(CF_CONTACTS.list.map(c=>c.region))].map(region=>`<section><h3>${esc(region)}</h3>${CF_CONTACTS.list.filter(c=>c.region===region).map(c=>`<div class="seller-entry"><p><strong>${esc(c.name)}</strong>${c.id===seller?.id?' <small>Seu atendimento</small>':c.id===CF_CONTACTS.primary?.id?' <small>Principal</small>':''}<br><a href="${esc(CF_CONTACTS.whatsapp(c))}" target="_blank" rel="noopener">${esc(CF_CONTACTS.format(c))} ↗</a></p><button class="seller-copy" data-copy-seller="${esc(c.id)}">Copiar link do catálogo</button><input class="seller-url" aria-label="Link do catálogo de ${esc(c.name)}" value="${esc(CF_CONTACTS.catalogURL(c).href)}" readonly hidden></div>`).join('')}</section>`).join('');
+  contactList.innerHTML=[...new Set(visibleContacts.map(c=>c.region))].map(region=>`<section><h3>${esc(region)}</h3>${visibleContacts.filter(c=>c.region===region).map(c=>`<div class="seller-entry"><p><strong>${esc(c.name)}</strong>${c.id===seller?.id?' <small>Seu atendimento</small>':c.id===CF_CONTACTS.primary?.id?' <small>Principal</small>':''}<br><a href="${esc(CF_CONTACTS.whatsapp(c))}" target="_blank" rel="noopener">${esc(CF_CONTACTS.format(c))} ↗</a></p><button class="seller-copy" data-copy-seller="${esc(c.id)}">Copiar link do catálogo</button><input class="seller-url" aria-label="Link do catálogo de ${esc(c.name)}" value="${esc(CF_CONTACTS.catalogURL(c).href)}" readonly hidden></div>`).join('')}</section>`).join('');
   $('#contato .contact-grid').after(contactList);
   contactList.querySelectorAll('[data-copy-seller]').forEach(button=>button.onclick=async()=>{const c=CF_CONTACTS.find(button.dataset.copySeller),input=button.nextElementSibling;try{await navigator.clipboard.writeText(CF_CONTACTS.catalogURL(c).href);button.textContent='Link copiado';}catch{input.hidden=false;input.select();button.textContent='Copie o link abaixo';}});
+  if(seller)$('#contato a[href^="tel:"]')?.closest('p')?.remove();
   const attendance=seller||CF_CONTACTS.primary;
   const mainContact=$('#contato .contact-grid .small-label')?.closest('.contact-grid')?.querySelector('a[href^="https://wa.me/"]');
   if(mainContact){const paragraph=mainContact.closest('p');paragraph.innerHTML=attendance?`<span class="small-label">WHATSAPP · ${esc(attendance.name.toUpperCase())}</span><a href="${esc(CF_CONTACTS.whatsapp(attendance))}" target="_blank" rel="noopener">${esc(CF_CONTACTS.format(attendance))} ↗</a>`:'';}
@@ -276,9 +304,11 @@
     $('#contato > .button').href=whatsapp();
     for(const link of document.querySelectorAll('[data-consult]')){const p=products.find(p=>p.id===Number(link.dataset.consult));link.href=whatsapp(p);}
     if(lastSuccess)$('#data-message').textContent=`Base consultada em ${new Date(lastSuccess).toLocaleString(CF_I18N.locale)}. Atualização automática a cada 5 minutos. Disponibilidade sujeita a confirmação.`;
+    paintPrices();
     CF_SYNC_DOM.restore(state);
   });
-  const refreshIfVisible=()=>{if(!document.hidden&&!printing&&!matchMedia('print').matches&&!demo)load(true,{silent:true});};
+  loadPrices();
+  const refreshIfVisible=()=>{if(!document.hidden&&!printing&&!matchMedia('print').matches&&!demo){load(true,{silent:true});loadPrices();}};
   setInterval(refreshIfVisible,refreshEvery);
   document.addEventListener('visibilitychange',()=>{if(!document.hidden&&Date.now()-lastAttempt>=refreshEvery)refreshIfVisible();});
   window.addEventListener('online',refreshIfVisible);

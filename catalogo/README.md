@@ -1,5 +1,27 @@
 # Catálogo digital CF Industrial
 
+## Visual simplificado das ações — 17/11/2026
+
+Removido o botão “Ver detalhes +”. As fotos continuam abrindo os detalhes, inclusive pelo teclado (Enter/Espaço). Abaixo do estoque, aparece primeiro o preço em laranja, sem fundo ou aparência de botão, e depois o botão preto “* Consulte formas de pagamento com o vendedor”. Panfleto e Post ficam em uma caixa discreta “Gerar:” junto da prioridade, com ícones, descrição acessível e nome ao passar o mouse. A mesma organização é usada nos detalhes. Ajustado para desktop/celular e PT/EN/ES; controles de geração não aparecem na impressão. Preservados os vendedores individuais e a leitura dos preços.
+
+Arquivos para publicar: `index.html`, `assets/js/catalogo.js`, `assets/js/idiomas.js`, `assets/css/catalogo.css`. O arquivo `data/precos-loja.json` da atualização anterior precisa estar publicado para mostrar os preços; se faltar, o catálogo mostra “Valor sob consulta”. Teste: `tests/conferir-acoes-layout.cjs`. Não publicar `tests/`.
+
+## Valores no catálogo e contato individual — 17/11/2026
+
+Substituído o link “Ver valores” por um valor de referência em reais com asterisco, sem navegação externa, nos cards e detalhes. Foram consultados os 51 links já confirmados por código na Brazilian Imports. Usa o preço principal anunciado, sem o desconto específico de Pix. Itens sem preço confirmado ficam como “Valor sob consulta”. A data da consulta aparece ao passar o mouse sobre o valor. O botão de atendimento agora diz “* Consulte melhores formas de pagamento com o vendedor”. Botões de detalhes/atendimento têm fundo laranja e texto branco, com PT/EN/ES.
+
+Em `?vendedor=ID`, a última página mostra somente o vendedor selecionado e não exibe o telefone geral da empresa. No catálogo geral, a lista completa permanece. A lista de vendedores continua centralizada em `assets/js/config.js`.
+
+### Atualização dos preços
+
+**Os valores são uma cópia consultada da loja, não uma consulta em tempo real.** O navegador lê somente `data/precos-loja.json` ao abrir e a cada 5 minutos, sem cache e sem recriar galerias. Isso mantém o catálogo leve e evita depender de acesso entre domínios no navegador. A atualização de estoque da API continua independente.
+
+Para buscar novamente os preços na loja, execute na pasta Site CF: `node catalogo/atualizar-valores.cjs`. Depois publique o arquivo atualizado `catalogo/data/precos-loja.json`. O script confere o SKU de cada página, isola o preço principal para não capturar relacionados ou desconto Pix, não reaproveita preço antigo de itens que falharem e preserva o arquivo anterior em caso de falha geral. Novos vínculos continuam em `assets/js/loja.js`.
+
+Arquivos para publicar desta alteração: `catalogo/index.html`, `catalogo/assets/js/catalogo.js`, `catalogo/assets/js/idiomas.js`, `catalogo/assets/css/catalogo.css`, **`catalogo/data/precos-loja.json`**. `catalogo/atualizar-valores.cjs` é a ferramenta local para próximas consultas. Não publicar `tests/`. Não houve publicação ou alteração no Apps Script.
+
+Conferência: `tests/valores-vendedores-resultados.json` (51 preços, preço principal TK1010, ausência de link externo, cards/detalhes, cinco vendedores isolados, catálogo geral, idiomas, celular e impressão).
+
 ## Legenda ao lado do Post — 14/11/2026
 
 A página do Post exibe uma legenda pronta para copiar, montada localmente com código, nome, descrição e aplicação do mesmo item da arte. Usa sempre o catálogo geral `https://www.cfindustrial.com.br/catalogo/`, o link exato de valores cadastrado em `assets/js/loja.js` (omitido quando não existir), a frase de distribuição e hashtags fixas. Não usa IA, tradutor externo ou novas consultas. Acompanha PT/EN/ES e oferece seleção manual se a cópia automática estiver bloqueada. A legenda não aparece na imagem baixada nem no PDF/impresso.

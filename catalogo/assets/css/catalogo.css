@@ -176,3 +176,21 @@ html{scroll-padding-top:calc(var(--catalog-header-height,170px) + 18px)}
 @media print{.catalog-header{display:none!important}html{scroll-padding-top:0}}
 
 @media print{.catalog-header+.seller-context{display:none!important}}
+
+/* Ações discretas e preço como informação, 17/11/2026. */
+.product-actions{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin-top:12px}
+.store-price,.store-price.has-price{display:block;padding:0;background:none;border:0;border-radius:0;color:var(--orange);font-size:22px;font-weight:700;line-height:1.3;cursor:text;white-space:normal}
+.store-price:not(.has-price){font-size:16px;font-weight:600}
+.quote,.detail-actions>[data-consult]{display:inline-flex;align-items:center;justify-content:center;max-width:100%;padding:10px 14px;border:1px solid #171717;border-radius:4px;background:#171717;color:#fff;font:600 12px/1.45 Arial,Helvetica,sans-serif;text-align:left;text-decoration:none;cursor:pointer}
+.quote:hover,.quote:focus-visible,.detail-actions>[data-consult]:hover{background:#333;border-color:#333;color:#fff}
+.generation-tools{display:inline-flex;align-items:center;gap:5px;border:1px solid #e0e0dd;border-radius:4px;padding:4px 5px 4px 8px;white-space:nowrap;background:#fff}
+.generation-tools>span{font-size:10px;font-weight:400;color:#707075;margin-right:2px}
+.generation-tools .flyer-link,.generation-tools .post-link{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;padding:0;border:1px solid #252525;border-radius:3px;background:#252525;color:#fff}
+.generation-tools .flyer-link:hover,.generation-tools .post-link:hover{background:#444;border-color:#444;color:#fff}
+.generation-tools a:focus-visible,.quote:focus-visible{outline:2px solid var(--orange);outline-offset:3px}
+.generation-tools svg{display:block;pointer-events:none}.detail-meta{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:12px 0}.detail-meta .status{margin:0}.detail-actions{margin-top:20px}
+.button.primary,.tools #clear,.seller-copy,.gallery-controls button{background:#171717;border-color:#171717;color:#fff}.button.primary:hover,.tools #clear:hover,.seller-copy:hover,.gallery-controls button:hover{background:#333;border-color:#333;color:#fff}
+@media(max-width:760px){.product-meta{flex-direction:row;align-items:center;gap:6px}.product-meta>.code{flex-basis:100%}.generation-tools{padding:3px 4px 3px 6px;gap:4px}.generation-tools .flyer-link,.generation-tools .post-link{width:34px;height:34px}.product-actions{align-items:flex-start;gap:9px}.quote{font-size:11px;padding:9px 11px;width:auto}.store-price,.store-price.has-price{font-size:20px}.store-price:not(.has-price){font-size:14px}.detail-actions>[data-consult]{font-size:12px}}
+@media print{.generation-tools,.store-price,.detail-actions{display:none!important}}
+
+.product-image[role=button]:focus-visible{outline:2px solid var(--orange);outline-offset:3px}

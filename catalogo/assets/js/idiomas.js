@@ -1,6 +1,11 @@
 (() => {
   'use strict';
   const dictionary={
+    'Gerar:':['Create:','Crear:'],'Gerar material':['Create artwork','Crear material'],'Gerar panfleto':['Create flyer','Crear folleto'],'Gerar post':['Create post','Crear publicación'],
+    '* Consulte formas de pagamento com o vendedor':['* Ask your salesperson about payment options','* Consulte formas de pago con el vendedor'],
+    '* Consulte melhores formas de pagamento com o vendedor':['* Ask your salesperson about the best payment options','* Consulte las mejores formas de pago con el vendedor'],
+    'Valor sob consulta':['Price on request','Precio a consultar'],'Preço de referência':['Reference price','Precio de referencia'],
+    'Consulte o vendedor para saber o valor.':['Contact your salesperson for the price.','Consulte el precio con el vendedor.'],
     'Ver valores':['View prices','Ver precios'],'Ver valores na Brazilian Imports':['View prices at Brazilian Imports','Ver precios en Brazilian Imports'],
     'FABRICADO POR':['MANUFACTURED BY','FABRICADO POR'],'REALIZADO POR':['PROVIDED BY','REALIZADO POR'],
     'Post CF Industrial':['CF Industrial Post','Publicación CF Industrial'],'Preparando o post…':['Preparing the post…','Preparando la publicación…'],'Baixar JPG':['Download JPG','Descargar JPG'],'QUALIDADE':['QUALITY','CALIDAD'],'PARCEIRO':['PARTNER','SOCIO'],'Post pronto para baixar.':['Post ready to download.','Publicación lista para descargar.'],'Post pronto, mas a foto não pôde ser carregada. Confira o acesso público da imagem.':['Post ready, but the photo could not be loaded. Check public image access.','Publicación lista, pero no se pudo cargar la foto. Compruebe el acceso público de la imagen.'],'O título deste item é muito extenso para o post.':['The item title is too long for the post.','El título del artículo es demasiado largo para la publicación.'],'Abra o botão Post no item desejado do catálogo.':['Open the Post button on the desired catalog item.','Abra el botón Post del artículo deseado del catálogo.'],

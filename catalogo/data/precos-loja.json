@@ -1,0 +1,263 @@
+{
+  "updatedAt": "2026-11-17T13:10:39.464Z",
+  "source": "Brazilian Imports",
+  "basis": "Preço principal anunciado, sem desconto específico por meio de pagamento",
+  "products": {
+    "CF167": {
+      "amount": 528,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:31.495Z"
+    },
+    "CF168": {
+      "amount": 530,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:31.413Z"
+    },
+    "CF176": {
+      "amount": 420,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:31.424Z"
+    },
+    "CF178": {
+      "amount": 489,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:31.959Z"
+    },
+    "MCVT": {
+      "amount": 25500,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:31.778Z"
+    },
+    "TK0006": {
+      "amount": 661.25,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:32.058Z"
+    },
+    "TK0062": {
+      "amount": 448.5,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:32.250Z"
+    },
+    "TK0064": {
+      "amount": 447.35,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:32.428Z"
+    },
+    "TK0065": {
+      "amount": 207,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:32.403Z"
+    },
+    "TK0066": {
+      "amount": 477.25,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:32.744Z"
+    },
+    "TK0067": {
+      "amount": 218.5,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:32.869Z"
+    },
+    "TK011": {
+      "amount": 215.63,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:32.918Z"
+    },
+    "TK018": {
+      "amount": 1262.7,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:33.370Z"
+    },
+    "TK050": {
+      "amount": 1380,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:33.345Z"
+    },
+    "TK051": {
+      "amount": 793.5,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:33.386Z"
+    },
+    "TK053": {
+      "amount": 1018.33,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:33.776Z"
+    },
+    "TK0909": {
+      "amount": 684.25,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:33.853Z"
+    },
+    "TK1010": {
+      "amount": 657.8,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:33.409Z"
+    },
+    "TK1011": {
+      "amount": 483,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:33.957Z"
+    },
+    "TK1117": {
+      "amount": 135.24,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:34.270Z"
+    },
+    "TK1130": {
+      "amount": 644,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:34.226Z"
+    },
+    "TK125": {
+      "amount": 207.46,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:34.298Z"
+    },
+    "TK1442": {
+      "amount": 2806.1,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:34.709Z"
+    },
+    "TK1511": {
+      "amount": 689.99,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:34.877Z"
+    },
+    "TK1520": {
+      "amount": 848.87,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:34.889Z"
+    },
+    "TK1567": {
+      "amount": 574.94,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:35.068Z"
+    },
+    "TK160": {
+      "amount": 43.7,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:35.473Z"
+    },
+    "TK164": {
+      "amount": 56.58,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:35.360Z"
+    },
+    "TK165": {
+      "amount": 655.49,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:35.566Z"
+    },
+    "TK166": {
+      "amount": 776.25,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:35.727Z"
+    },
+    "TK1717": {
+      "amount": 1265,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:35.949Z"
+    },
+    "TK176": {
+      "amount": 230,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:36.689Z"
+    },
+    "TK200A": {
+      "amount": 207,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:36.229Z"
+    },
+    "TK200E": {
+      "amount": 517.5,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:36.514Z"
+    },
+    "TK2012": {
+      "amount": 277.04,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:36.794Z"
+    },
+    "TK206": {
+      "amount": 1518,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:36.994Z"
+    },
+    "TK251": {
+      "amount": 1798.6,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:37.189Z"
+    },
+    "TK2626": {
+      "amount": 184,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:37.157Z"
+    },
+    "TK3075": {
+      "amount": 1748,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:37.480Z"
+    },
+    "TK4589": {
+      "amount": 745.2,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:37.628Z"
+    },
+    "TK482": {
+      "amount": 172.5,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:37.678Z"
+    },
+    "TK500": {
+      "amount": 874,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:37.973Z"
+    },
+    "TK5080": {
+      "amount": 642.85,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:38.167Z"
+    },
+    "TK5427": {
+      "amount": 98.33,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:38.207Z"
+    },
+    "TK680": {
+      "amount": 184.01,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:38.365Z"
+    },
+    "TK6L": {
+      "amount": 800,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:38.648Z"
+    },
+    "TK761": {
+      "amount": 1759.5,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:38.683Z"
+    },
+    "TK773": {
+      "amount": 1610,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:38.863Z"
+    },
+    "TKBG": {
+      "amount": 184,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:39.464Z"
+    },
+    "TKPS1": {
+      "amount": 1518,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:39.176Z"
+    },
+    "TKPS2": {
+      "amount": 1772.3,
+      "currency": "BRL",
+      "checkedAt": "2026-11-17T13:10:39.278Z"
+    }
+  },
+  "failures": []
+}
